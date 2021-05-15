@@ -19,14 +19,18 @@ const Expenses = (props) => {
         value={filteredYear}
         onChangeFilter={onChangeFilterHandler}
       />
-      {filteredExpenses.map((item) => (
-        <ExpenseItem
-          key={item.id}
-          title={item.title}
-          date={item.date}
-          amount={item.amount}
-        />
-      ))}
+      {filteredExpenses.length === 0 ? (
+        <div>No expense found</div>
+      ) : (
+        filteredExpenses.map((item) => (
+          <ExpenseItem
+            key={item.id}
+            title={item.title}
+            date={item.date}
+            amount={item.amount}
+          />
+        ))
+      )}
     </Card>
   );
 };
