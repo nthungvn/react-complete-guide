@@ -1,0 +1,87 @@
+import { useState } from 'react';
+import Alert from '../Alert/Alert';
+import Button from '../Button/Button';
+import Card from '../Card/Card';
+import styles from './AddUser.module.css';
+
+const UserInput = (props) => {
+  const [enteredUserName, setEnteredUserName] = useState('');
+  const [enteredAge, setEnteredAge] = useState('');
+  const [isShowAlert, setIsShowAlert] = useState(false);
+  let [message, setMessage] = useState(false);
+
+  const addUserHandler = (event) => {
+    event.preventDefault();
+    if (enteredUserName.length === 0 || enteredAge.length === 0) {
+      setMessage('Please enter a valid name and age (non-empty values)');
+      setIsShowAlert(true);
+      return;
+    } else if (+enteredAge <= 0) {
+      setMessage('Please enter a valid age (> 0)');
+      setIsShowAlert(true);
+      return;
+    }
+
+    setEnteredUserName('');
+    setEnteredAge('');
+
+    props.onAddUser({
+      id: Math.random(),
+      userName: enteredUserName,
+      age: +enteredAge,
+    });
+  };
+
+  const userNameInputHandler = (event) => {
+    const value = event.target.value.trim();
+    setEnteredUserName(value);
+  };
+
+  const ageInputHandler = (event) => {
+    const value = event.target.value.trim();
+    setEnteredAge(value);
+  };
+
+  const dismissHandler = () => {
+    setIsShowAlert(false);
+  };
+
+  return (
+    <div>
+      <Alert
+        onOkClick={dismissHandler}
+        onBackdropClick={dismissHandler}
+        visible={`${isShowAlert}`}
+        headerText="Invalid input"
+        message={message}
+      />
+      <Card>
+        <form onSubmit={addUserHandler}>
+          <div className={styles['form-control']}>
+            <label htmlFor="username">Username</label>
+            <input
+              id="username"
+              value={enteredUserName}
+              onInput={userNameInputHandler}
+              type="text"
+            />
+          </div>
+          <div className={styles['form-control']}>
+            <label htmlFor="age">Age (Years)</label>
+            <input
+              id="age"
+              type="number"
+              value={enteredAge}
+              onInput={ageInputHandler}
+            />
+          </div>
+          <div className={styles.actions}>
+            <Button>Add User</Button>
+          </div>
+        </form>
+      </Card>
+    </div>
+  );
+};
+
+export default UserInput;
