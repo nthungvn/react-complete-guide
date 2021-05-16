@@ -1,25 +1,31 @@
 import { useState } from 'react';
-import Alert from '../Alert/Alert';
 import Button from '../UI/Button/Button';
 import Card from '../UI/Card/Card';
+import Modal from '../UI/Modal/Modal';
 import classes from './AddUser.module.css';
 
-const UserInput = (props) => {
+const AddUser = (props) => {
   const [enteredUsername, setEnteredUsername] = useState('');
   const [enteredAge, setEnteredAge] = useState('');
-  const [isShowAlert, setIsShowAlert] = useState(false);
-  let [message, setMessage] = useState(false);
+  const [isShowModal, setIsShowModal] = useState(false);
+  let [error, setError] = useState({});
 
   const addUserHandler = (event) => {
     event.preventDefault();
     if (enteredUsername.trim().length === 0 || enteredAge.trim().length === 0) {
-      setMessage('Please enter a valid name and age (non-empty values)');
-      setIsShowAlert(true);
+      setError({
+        title: 'Invalid input',
+        message: 'Please enter a valid name and age (non-empty values)',
+      });
+      setIsShowModal(true);
       return;
     }
     if (+enteredAge <= 0) {
-      setMessage('Please enter a valid age (> 0)');
-      setIsShowAlert(true);
+      setError({
+        title: 'Invalid age',
+        message: 'Please enter a valid age (> 0)',
+      });
+      setIsShowModal(true);
       return;
     }
 
@@ -41,18 +47,17 @@ const UserInput = (props) => {
     setEnteredAge(event.target.value);
   };
 
-  const dismissHandler = () => {
-    setIsShowAlert(false);
+  const confirmHandler = () => {
+    setIsShowModal(false);
   };
 
   return (
     <div>
-      <Alert
-        onOkClick={dismissHandler}
-        onBackdropClick={dismissHandler}
-        visible={`${isShowAlert}`}
-        headerText="Invalid input"
-        message={message}
+      <Modal
+        onConfirm={confirmHandler}
+        visible={`${isShowModal}`}
+        title={error.title}
+        message={error.message}
       />
       <Card className={classes.input}>
         <form onSubmit={addUserHandler}>
@@ -83,4 +88,4 @@ const UserInput = (props) => {
   );
 };
 
-export default UserInput;
+export default AddUser;

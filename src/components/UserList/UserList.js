@@ -5,7 +5,7 @@ import classes from './UserList.module.css';
 const UserList = (props) => {
   if (!props.users || props.users.length === 0) {
     return (
-      <Card>
+      <Card className={classes.users}>
         <h2 className={classes['no-users']}>Found no users</h2>
       </Card>
     );
