@@ -5,14 +5,14 @@ import Card from '../UI/Card/Card';
 import classes from './AddUser.module.css';
 
 const UserInput = (props) => {
-  const [enteredUserName, setEnteredUserName] = useState('');
+  const [enteredUsername, setEnteredUsername] = useState('');
   const [enteredAge, setEnteredAge] = useState('');
   const [isShowAlert, setIsShowAlert] = useState(false);
   let [message, setMessage] = useState(false);
 
   const addUserHandler = (event) => {
     event.preventDefault();
-    if (enteredUserName.trim().length === 0 || enteredAge.trim().length === 0) {
+    if (enteredUsername.trim().length === 0 || enteredAge.trim().length === 0) {
       setMessage('Please enter a valid name and age (non-empty values)');
       setIsShowAlert(true);
       return;
@@ -22,21 +22,21 @@ const UserInput = (props) => {
       return;
     }
 
-    setEnteredUserName('');
+    setEnteredUsername('');
     setEnteredAge('');
 
     props.onAddUser({
       id: Math.random(),
-      userName: enteredUserName,
+      username: enteredUsername,
       age: +enteredAge,
     });
   };
 
-  const userNameInputHandler = (event) => {
-    setEnteredUserName(event.target.value);
+  const usernameChangeHandler = (event) => {
+    setEnteredUsername(event.target.value);
   };
 
-  const ageInputHandler = (event) => {
+  const ageChangeHandler = (event) => {
     setEnteredAge(event.target.value);
   };
 
@@ -59,8 +59,8 @@ const UserInput = (props) => {
             <label htmlFor="username">Username</label>
             <input
               id="username"
-              value={enteredUserName}
-              onInput={userNameInputHandler}
+              value={enteredUsername}
+              onChange={usernameChangeHandler}
               type="text"
             />
           </div>
@@ -70,11 +70,11 @@ const UserInput = (props) => {
               id="age"
               type="number"
               value={enteredAge}
-              onInput={ageInputHandler}
+              onChange={ageChangeHandler}
             />
           </div>
           <div className={classes.actions}>
-            <Button>Add User</Button>
+            <Button type="submit">Add User</Button>
           </div>
         </form>
       </Card>
