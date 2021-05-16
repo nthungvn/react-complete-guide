@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import Alert from '../Alert/Alert';
 import Button from '../Button/Button';
-import Card from '../Card/Card';
-import styles from './AddUser.module.css';
+import Card from '../UI/Card/Card';
+import classes from './AddUser.module.css';
 
 const UserInput = (props) => {
   const [enteredUserName, setEnteredUserName] = useState('');
@@ -55,9 +55,9 @@ const UserInput = (props) => {
         headerText="Invalid input"
         message={message}
       />
-      <Card>
+      <Card className={classes.input}>
         <form onSubmit={addUserHandler}>
-          <div className={styles['form-control']}>
+          <div className={classes['form-control']}>
             <label htmlFor="username">Username</label>
             <input
               id="username"
@@ -66,7 +66,7 @@ const UserInput = (props) => {
               type="text"
             />
           </div>
-          <div className={styles['form-control']}>
+          <div className={classes['form-control']}>
             <label htmlFor="age">Age (Years)</label>
             <input
               id="age"
@@ -75,7 +75,7 @@ const UserInput = (props) => {
               onInput={ageInputHandler}
             />
           </div>
-          <div className={styles.actions}>
+          <div className={classes.actions}>
             <Button>Add User</Button>
           </div>
         </form>

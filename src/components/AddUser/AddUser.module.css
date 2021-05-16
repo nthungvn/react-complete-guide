@@ -1,19 +1,33 @@
+.input {
+  margin: 2rem auto;
+  padding: 1rem;
+  width: 90%;
+  max-width: 40rem;
+}
+
 .form-control {
   margin-bottom: 1rem;
 }
 
 .form-control label {
   display: block;
-  margin-bottom: 0.2rem;
   font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
 .form-control input {
-  width: 100%;
-  padding: 0.4rem;
-  font-size: 1rem;
   border-radius: 5px;
-  border: 1px solid #818080;
+  border: 1px solid #ccc;
+  display: block;
+  font-size: 1rem;
+  font: inherit;
+  padding: 0.4rem;
+  width: 100%;
+}
+
+.form-control input:focus {
+  outline: none;
+  border-color: #2166e6;
 }
 
 .actions {
