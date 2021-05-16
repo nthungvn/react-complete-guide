@@ -1,0 +1,6 @@
+.user {
+  border-radius: 5px;
+  border: 1px solid rgba(128, 128, 128, 0.3);
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+}

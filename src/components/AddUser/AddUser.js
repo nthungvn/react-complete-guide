@@ -16,7 +16,8 @@ const UserInput = (props) => {
       setMessage('Please enter a valid name and age (non-empty values)');
       setIsShowAlert(true);
       return;
-    } else if (+enteredAge <= 0) {
+    }
+    if (+enteredAge <= 0) {
       setMessage('Please enter a valid age (> 0)');
       setIsShowAlert(true);
       return;
