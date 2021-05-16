@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Alert from '../Alert/Alert';
-import Button from '../Button/Button';
+import Button from '../UI/Button/Button';
 import Card from '../UI/Card/Card';
 import classes from './AddUser.module.css';
 
@@ -12,7 +12,7 @@ const UserInput = (props) => {
 
   const addUserHandler = (event) => {
     event.preventDefault();
-    if (enteredUserName.length === 0 || enteredAge.length === 0) {
+    if (enteredUserName.trim().length === 0 || enteredAge.trim().length === 0) {
       setMessage('Please enter a valid name and age (non-empty values)');
       setIsShowAlert(true);
       return;
@@ -33,13 +33,11 @@ const UserInput = (props) => {
   };
 
   const userNameInputHandler = (event) => {
-    const value = event.target.value.trim();
-    setEnteredUserName(value);
+    setEnteredUserName(event.target.value);
   };
 
   const ageInputHandler = (event) => {
-    const value = event.target.value.trim();
-    setEnteredAge(value);
+    setEnteredAge(event.target.value);
   };
 
   const dismissHandler = () => {
