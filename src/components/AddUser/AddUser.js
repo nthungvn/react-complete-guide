@@ -1,18 +1,23 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useRef, useState } from 'react';
 import Button from '../UI/Button/Button';
 import Card from '../UI/Card/Card';
 import Modal from '../UI/Modal/Modal';
 import classes from './AddUser.module.css';
 
 const AddUser = (props) => {
-  const [enteredUsername, setEnteredUsername] = useState('');
-  const [enteredAge, setEnteredAge] = useState('');
+  const enteredUsernameRef = useRef();
+  const enteredAgeRef = useRef();
+
   const [isShowModal, setIsShowModal] = useState(false);
   const [error, setError] = useState({});
 
   const addUserHandler = (event) => {
     event.preventDefault();
-    if (enteredUsername.trim().length === 0 || enteredAge.trim().length === 0) {
+
+    const enteredUsername = enteredUsernameRef.current.value.trim();
+    const enteredAge = enteredAgeRef.current.value.trim();
+
+    if (enteredUsername === 0 || enteredAge === 0) {
       setError({
         title: 'Invalid input',
         message: 'Please enter a valid name and age (non-empty values)',
@@ -29,22 +34,14 @@ const AddUser = (props) => {
       return;
     }
 
-    setEnteredUsername('');
-    setEnteredAge('');
+    enteredUsernameRef.current.value = '';
+    enteredAgeRef.current.value = '';
 
     props.onAddUser({
       id: Math.random(),
       username: enteredUsername,
       age: +enteredAge,
     });
-  };
-
-  const usernameChangeHandler = (event) => {
-    setEnteredUsername(event.target.value);
-  };
-
-  const ageChangeHandler = (event) => {
-    setEnteredAge(event.target.value);
   };
 
   const confirmHandler = () => {
@@ -65,9 +62,8 @@ const AddUser = (props) => {
             <label htmlFor="username">Username</label>
             <input
               id="username"
-              value={enteredUsername}
-              onChange={usernameChangeHandler}
               type="text"
+              ref={enteredUsernameRef}
             />
           </div>
           <div className={classes['form-control']}>
@@ -75,8 +71,7 @@ const AddUser = (props) => {
             <input
               id="age"
               type="number"
-              value={enteredAge}
-              onChange={ageChangeHandler}
+              ref={enteredAgeRef}
             />
           </div>
           <div className={classes.actions}>
