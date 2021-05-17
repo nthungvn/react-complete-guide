@@ -45,18 +45,18 @@
   }
 }
 
-.show .backdrop {
+.backdrop.show {
   display: block;
 }
 
-.show .modal {
-  top: 30vh;
-}
-
-.hide .backdrop {
+.backdrop.hide {
   display: none;
 }
 
-.hide .modal {
+.modal.show {
+  top: 30vh;
+}
+
+.modal.hide {
   top: -100vh;
 }
