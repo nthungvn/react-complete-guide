@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import Button from '../UI/Button/Button';
 import Card from '../UI/Card/Card';
 import Modal from '../UI/Modal/Modal';
@@ -52,7 +52,7 @@ const AddUser = (props) => {
   };
 
   return (
-    <>
+    <Fragment>
       <Modal
         onConfirm={confirmHandler}
         visible={`${isShowModal}`}
@@ -84,7 +84,7 @@ const AddUser = (props) => {
           </div>
         </form>
       </Card>
-    </>
+    </Fragment>
   );
 };
 
