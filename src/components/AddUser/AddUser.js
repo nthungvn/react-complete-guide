@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Wrapper from '../Helpers/Wrapper';
 import Button from '../UI/Button/Button';
 import Card from '../UI/Card/Card';
 import Modal from '../UI/Modal/Modal';
@@ -53,7 +52,7 @@ const AddUser = (props) => {
   };
 
   return (
-    <Wrapper>
+    <>
       <Modal
         onConfirm={confirmHandler}
         visible={`${isShowModal}`}
@@ -85,7 +84,7 @@ const AddUser = (props) => {
           </div>
         </form>
       </Card>
-    </Wrapper>
+    </>
   );
 };
 
