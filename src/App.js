@@ -4,7 +4,6 @@ import Login from './components/Login/Login';
 import MainHeader from './components/MainHeader/MainHeader';
 import AuthContext from './store/auth-context';
 
-
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
@@ -31,9 +30,10 @@ function App() {
     <AuthContext.Provider
       value={{
         isLoggedIn: isLoggedIn,
+        onLogout: logoutHandler,
       }}
     >
-      <MainHeader onLogout={logoutHandler} />
+      <MainHeader />
       <main>
         {!isLoggedIn && <Login onLogin={loginHandler} />}
         {isLoggedIn && <Home onLogout={logoutHandler} />}
