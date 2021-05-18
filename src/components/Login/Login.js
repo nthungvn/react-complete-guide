@@ -1,4 +1,5 @@
-import React, { useEffect, useReducer, useState } from 'react';
+import React, { useContext, useEffect, useReducer, useState } from 'react';
+import AuthContext from '../../store/auth-context';
 import Button from '../UI/Button/Button';
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
@@ -39,6 +40,8 @@ const Login = (props) => {
   const { isValid: isEmailValid } = emailState;
   const { isValid: isPasswordValid } = passwordState;
 
+  const ctx = useContext(AuthContext);
+
   useEffect(() => {
     const identifer = setTimeout(() => {
       console.log('Checking for validity');
@@ -68,7 +71,7 @@ const Login = (props) => {
 
   const submitHandler = (event) => {
     event.preventDefault();
-    props.onLogin(emailState.value, passwordState.value);
+    ctx.onLogin(emailState.value, passwordState.value);
   };
 
   return (
