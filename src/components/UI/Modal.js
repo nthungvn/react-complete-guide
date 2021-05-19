@@ -4,7 +4,7 @@ import Card from './Card';
 import classes from './Modal.module.css';
 
 const Backdrop = (props) => {
-  return <div className={classes.backdrop} />;
+  return <div className={classes.backdrop} onClick={props.onClose} />;
 };
 
 const ModalOverlay = (props) => {
@@ -18,7 +18,7 @@ const ModalOverlay = (props) => {
 const Modal = (props) => {
   return ReactDOM.createPortal(
     <Fragment>
-      <Backdrop />
+      <Backdrop onClose={props.onClose} />
       <ModalOverlay>{props.children}</ModalOverlay>
     </Fragment>,
     document.getElementById('overlays')

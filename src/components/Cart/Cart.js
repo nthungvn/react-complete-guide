@@ -14,14 +14,16 @@ const Cart = (props) => {
   const cartItems = items.map((item) => <CartItem key={item.id} {...item} />);
 
   return (
-    <Modal>
+    <Modal onClose={props.onClose}>
       <ul className={classes['cart-items']}>{cartItems}</ul>
       <div className={classes.total}>
         <div>Total Amount</div>
         <div>{totalPrice}</div>
       </div>
       <div className={classes.actions}>
-        <button className={classes['button--alt']}>Close</button>
+        <button className={classes['button--alt']} onClick={props.onClose}>
+          Close
+        </button>
         <button className={classes.button}>Order</button>
       </div>
     </Modal>
