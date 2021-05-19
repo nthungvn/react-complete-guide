@@ -15,8 +15,7 @@
 }
 
 .title {
-  font-weight: bold;
-  margin: 0;
+  margin-right: 0.5rem;
 }
 
 .main-image {
@@ -31,4 +30,10 @@
   height: 110%;
   object-fit: cover;
   transform: rotateZ(-5deg) translateY(-4rem) translateX(-1rem);
+}
+
+@media (min-width: 768px) {
+  .title {
+    margin-right: 0;
+  }
 }
