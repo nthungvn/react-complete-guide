@@ -2,7 +2,7 @@ import React from 'react';
 
 import classes from './Button.module.css';
 
-const Button = (props) => {
+const Button = React.memo((props) => {
   console.log('BUTTON RUNNING...');
 
   return (
@@ -15,6 +15,6 @@ const Button = (props) => {
       {props.children}
     </button>
   );
-};
+});
 
 export default Button;
