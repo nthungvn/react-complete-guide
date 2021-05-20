@@ -12,7 +12,7 @@ function App() {
     if (enableToggle) {
       setShowParagraph((prevState) => !prevState);
     }
-  }, []);
+  }, [enableToggle]);
 
   const enableToggleHandler = useCallback(() => {
     setEnableToggle(true);
