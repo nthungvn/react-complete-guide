@@ -12,6 +12,12 @@ class Users extends Component {
     this.setState((prevState) => ({ showUsers: !prevState.showUsers }));
   };
 
+  componentDidUpdate() {
+    if (this.props.users.length === 0) {
+      throw new Error('There are no users');
+    }
+  }
+
   render() {
     const usersList = (
       <ul>
