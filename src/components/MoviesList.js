@@ -1,5 +1,4 @@
 import React from 'react';
-
 import Movie from './Movie';
 import classes from './MoviesList.module.css';
 
@@ -10,7 +9,7 @@ const MovieList = (props) => {
         <Movie
           key={movie.id}
           title={movie.title}
-          releaseDate={movie.release}
+          releaseDate={movie.releaseDate}
           openingText={movie.openingText}
         />
       ))}
