@@ -6,25 +6,31 @@ import MealItem from './MealItem/MealItem';
 const AvailableMeals = (props) => {
   const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchMeals = async () => {
       setIsLoading(true);
-      const response = await fetch(
-        'https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json'
-      );
-      if (!response.ok) {
-        throw Error('Something went wrong!');
+      setError(null);
+      try {
+        const response = await fetch(
+          'https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json'
+        );
+        if (!response.ok) {
+          throw Error('Something went wrong!');
+        }
+        const data = await response.json();
+        const meals = [];
+        for (let key in data) {
+          meals.push({
+            id: key,
+            ...data[key],
+          });
+        }
+        setMeals(meals);
+      } catch (error) {
+        setError(error.message);
       }
-      const data = await response.json();
-      const meals = [];
-      for (let key in data) {
-        meals.push({
-          id: key,
-          ...data[key],
-        });
-      }
-      setMeals(meals);
       setIsLoading(false);
     };
     fetchMeals();
@@ -48,6 +54,10 @@ const AvailableMeals = (props) => {
 
   if (isLoading) {
     content = <p>Loading...</p>;
+  }
+
+  if (error) {
+    content = <p>{error}</p>;
   }
 
   return (
