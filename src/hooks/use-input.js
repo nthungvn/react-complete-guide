@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-const useInput = (defaultValue, validator) => {
-  const [enteredValue, setEnteredValue] = useState(defaultValue);
+const useInput = (validator) => {
+  const [enteredValue, setEnteredValue] = useState('');
   const [isTouched, setIsTouched] = useState(false);
 
   const valueIsValid = validator(enteredValue);
@@ -18,7 +18,7 @@ const useInput = (defaultValue, validator) => {
   const reset = () => {
     setEnteredValue('');
     setIsTouched(false);
-  }
+  };
 
   return [
     enteredValue,
@@ -26,7 +26,7 @@ const useInput = (defaultValue, validator) => {
     valueIsValid,
     valueChangeHandler,
     inputBlurHandler,
-    reset
+    reset,
   ];
 };
 

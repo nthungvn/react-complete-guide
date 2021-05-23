@@ -8,7 +8,7 @@ const SimpleInput = (props) => {
     nameInputChangeHandler,
     nameInputBlurHandler,
     resetName,
-  ] = useInput('', (enteredName) => enteredName.trim() !== '');
+  ] = useInput((enteredName) => enteredName.trim() !== '');
 
   const [
     enteredEmail,
@@ -18,7 +18,6 @@ const SimpleInput = (props) => {
     emailInputBlurHandler,
     resetEmail,
   ] = useInput(
-    '',
     (enteredEmail) => enteredEmail.trim() !== '' && enteredEmail.includes('@')
   );
 
