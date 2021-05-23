@@ -1,27 +1,24 @@
 import { useState } from 'react';
+import useInput from '../hooks/use-input';
 
 const SimpleInput = (props) => {
-  const [enteredName, setEnteredName] = useState('');
-  const [enteredNameTouched, setEnteredNameTouched] = useState(false);
+  const [
+    enteredName,
+    nameInputIsInvalid,
+    enteredNameIsValid,
+    nameInputChangeHandler,
+    nameInputBlurHandler,
+    resetName,
+  ] = useInput('', (enteredName) => enteredName.trim() !== '');
 
   const [enteredEmail, setEnteredEmail] = useState('');
   const [enteredEmailTouched, setEnteredEmailTouched] = useState(false);
 
-  const enteredNameIsValid = enteredName.trim() !== '';
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
-
-  const enteredEmailIsValid = enteredEmail.trim() !== '' && enteredEmail.includes('@');
+  const enteredEmailIsValid =
+    enteredEmail.trim() !== '' && enteredEmail.includes('@');
   const emailInputIsInvalid = !enteredEmailIsValid && enteredEmailTouched;
 
   const formIsValid = enteredNameIsValid && enteredEmailIsValid;
-
-  const nameInputChangeHandler = (event) => {
-    setEnteredName(event.target.value);
-  };
-
-  const nameInputBlurHandler = (event) => {
-    setEnteredNameTouched(true);
-  };
 
   const emailInputChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
@@ -34,13 +31,11 @@ const SimpleInput = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
 
-    setEnteredNameTouched(true);
     if (!formIsValid) {
       return;
     }
 
-    setEnteredName('');
-    setEnteredNameTouched(false);
+    resetName();
 
     setEnteredEmail('');
     setEnteredEmailTouched(false);
