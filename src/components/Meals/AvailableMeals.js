@@ -5,9 +5,11 @@ import MealItem from './MealItem/MealItem';
 
 const AvailableMeals = (props) => {
   const [meals, setMeals] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchMeals = async () => {
+      setIsLoading(true);
       const response = await fetch(
         'https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json'
       );
@@ -23,6 +25,7 @@ const AvailableMeals = (props) => {
         });
       }
       setMeals(meals);
+      setIsLoading(false);
     };
     fetchMeals();
   }, []);
@@ -37,11 +40,19 @@ const AvailableMeals = (props) => {
     />
   ));
 
+  let content = <p>Found no meals</p>;
+
+  if (meals.length > 0) {
+    content = <ul>{mealsList}</ul>;
+  }
+
+  if (isLoading) {
+    content = <p>Loading...</p>;
+  }
+
   return (
     <section className={classes.meals}>
-      <Card>
-        <ul>{mealsList}</ul>
-      </Card>
+      <Card>{content}</Card>
     </section>
   );
 };
