@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import useHttp from '../../hooks/use-http';
 import CartContext from '../../store/cart-context';
 import Modal from '../UI/Modal';
@@ -7,7 +7,8 @@ import CartItem from './CartItem';
 import Checkout from './Checkout';
 
 const Cart = (props) => {
-  const [isLoading, error, httpRequest] = useHttp();
+  const [isProcessing, , httpRequest] = useHttp();
+  const [didCheckout, setDidCheckout] = useState(false);
 
   const [isCheckout, setIsCheckout] = useState(false);
   const cartCtx = useContext(CartContext);
@@ -39,9 +40,8 @@ const Cart = (props) => {
       },
     };
     const responseHandler = (data) => {
-      console.log(data);
-      // cartCtx.
-      // props.onClose();
+      cartCtx.clear();
+      setDidCheckout(true);
     };
     httpRequest(requestConfig, responseHandler);
   };
@@ -68,8 +68,8 @@ const Cart = (props) => {
     </div>
   );
 
-  return (
-    <Modal onClose={props.onClose}>
+  let content = (
+    <Fragment>
       <ul className={classes['cart-items']}>{cartItems}</ul>
       <div className={classes.total}>
         <div>Total Amount</div>
@@ -79,7 +79,26 @@ const Cart = (props) => {
         <Checkout onConfirm={submitOrderHandler} onCancel={props.onClose} />
       )}
       {!isCheckout && modalActions}
-    </Modal>
+    </Fragment>
   );
+
+  if (isProcessing) {
+    content = <p>Processing...</p>;
+  }
+
+  if (didCheckout) {
+    content = (
+      <Fragment>
+        <p>Your order will be proceed soon! Enjoy!</p>
+        <div className={classes.actions}>
+          <button className={classes.button} onClick={props.onClose}>
+            Close
+          </button>
+        </div>
+      </Fragment>
+    );
+  }
+
+  return <Modal onClose={props.onClose}>{content}</Modal>;
 };
 export default Cart;
