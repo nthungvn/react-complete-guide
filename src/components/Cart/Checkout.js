@@ -7,7 +7,8 @@ const isPostal = (value) => value.trim().length === 5 && parseInt(value.trim());
 
 const Checkout = (props) => {
   const [nameValue, nameIsValid, nameChangeHandler] = useInput(isNotEmpty);
-  const [streetValue, streetIsValid, streetChangeHandler] = useInput(isNotEmpty);
+  const [streetValue, streetIsValid, streetChangeHandler] =
+    useInput(isNotEmpty);
   const [postalValue, postalIsValid, postalChangeHandler] = useInput(isPostal);
   const [cityValue, cityIsValid, cityChangeHandler] = useInput(isNotEmpty);
   const [isTouched, setIsTouched] = useState(false);
@@ -16,13 +17,17 @@ const Checkout = (props) => {
     nameIsValid && streetIsValid && postalIsValid && cityIsValid;
 
   const confirmHandler = (event) => {
-    setIsTouched(true);
     event.preventDefault();
+    setIsTouched(true);
     if (!formIsValid) {
       return;
     }
-    console.log(nameValue, streetValue, postalValue, cityValue);
-    setIsTouched(false);
+    props.onConfirm({
+      name: nameValue,
+      street: streetValue,
+      postal: postalValue,
+      city: cityValue,
+    });
   };
 
   const nameControlClasses =
