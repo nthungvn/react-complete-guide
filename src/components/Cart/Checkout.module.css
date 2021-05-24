@@ -25,8 +25,8 @@
   outline: none;
 }
 
-.control input:active,
-.control input:focus {
+.control input:hover,
+.control input:active {
   border-color: #0758ee;
 }
 
@@ -70,4 +70,9 @@
 .invalid input {
   border-color: #aa0b20;
   background: #ffeff1;
+}
+
+.invalid input:hover,
+.invalid input:active {
+  border-color: #61020f;
 }

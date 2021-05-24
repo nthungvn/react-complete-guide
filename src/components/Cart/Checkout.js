@@ -1,20 +1,50 @@
+import { useState } from 'react';
 import useInput from '../../hooks/use-input';
 import classes from './Checkout.module.css';
 
+const isNotEmpty = (value) => value.trim() !== '';
+const isPostal = (value) => value.trim().length === 5 && parseInt(value.trim());
+
 const Checkout = (props) => {
-  const [nameValue, nameChangeHandler] = useInput();
-  const [streetValue, streetChangeHandler] = useInput();
-  const [postalValue, postalChangeHandler] = useInput();
-  const [cityValue, cityChangeHandler] = useInput();
+  const [nameValue, nameIsValid, nameChangeHandler] = useInput(isNotEmpty);
+  const [streetValue, streetIsValid, streetChangeHandler] = useInput(isNotEmpty);
+  const [postalValue, postalIsValid, postalChangeHandler] = useInput(isPostal);
+  const [cityValue, cityIsValid, cityChangeHandler] = useInput(isNotEmpty);
+  const [isTouched, setIsTouched] = useState(false);
+
+  const formIsValid =
+    nameIsValid && streetIsValid && postalIsValid && cityIsValid;
 
   const confirmHandler = (event) => {
+    setIsTouched(true);
     event.preventDefault();
+    if (!formIsValid) {
+      return;
+    }
     console.log(nameValue, streetValue, postalValue, cityValue);
+    setIsTouched(false);
   };
+
+  const nameControlClasses =
+    isTouched && !nameIsValid
+      ? `${classes.control} ${classes.invalid}`
+      : classes.control;
+  const streetControlClasses =
+    isTouched && !streetIsValid
+      ? `${classes.control} ${classes.invalid}`
+      : classes.control;
+  const postalControlClasses =
+    isTouched && !postalIsValid
+      ? `${classes.control} ${classes.invalid}`
+      : classes.control;
+  const cityControlClasses =
+    isTouched && !cityIsValid
+      ? `${classes.control} ${classes.invalid}`
+      : classes.control;
 
   return (
     <form onSubmit={confirmHandler} className={classes.form}>
-      <div className={classes.control}>
+      <div className={nameControlClasses}>
         <label htmlFor="name">Your Name</label>
         <input
           id="name"
@@ -25,7 +55,7 @@ const Checkout = (props) => {
         />
       </div>
 
-      <div className={classes.control}>
+      <div className={streetControlClasses}>
         <label htmlFor="street">Street</label>
         <input
           id="street"
@@ -36,7 +66,7 @@ const Checkout = (props) => {
         />
       </div>
 
-      <div className={classes.control}>
+      <div className={postalControlClasses}>
         <label htmlFor="postal">Postal Code</label>
         <input
           id="postal"
@@ -47,7 +77,7 @@ const Checkout = (props) => {
         />
       </div>
 
-      <div className={classes.control}>
+      <div className={cityControlClasses}>
         <label htmlFor="city">City</label>
         <input
           id="city"
