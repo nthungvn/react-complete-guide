@@ -7,7 +7,7 @@ const ProductItem = (props) => {
   const { id, title, price, description } = props;
   const dispatch = useDispatch();
 
-  const addItemToCartHandler = () => {
+  const addToCartHandler = () => {
     dispatch(cartActions.addItemToCart({ id, title, price, quantity: 1 }));
   };
 
@@ -20,7 +20,7 @@ const ProductItem = (props) => {
         </header>
         <p>{description}</p>
         <div className={classes.actions}>
-          <button onClick={addItemToCartHandler}>Add to Cart</button>
+          <button onClick={addToCartHandler}>Add to Cart</button>
         </div>
       </Card>
     </li>

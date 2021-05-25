@@ -13,7 +13,7 @@ const cartSlice = createSlice({
         (item) => item.id === action.payload.id
       );
       if (foundIndex !== -1) {
-        state.items[foundIndex].quantity = state.items[foundIndex].quantity + 1;
+        state.items[foundIndex].quantity++;
       } else {
         state.items.push(action.payload);
       }
@@ -24,29 +24,10 @@ const cartSlice = createSlice({
         (item) => item.id === action.payload
       );
       if (foundIndex !== -1) {
-        state.items.splice(foundIndex, 1);
-      }
-    },
-
-    increaseQuantity: (state, action) => {
-      const foundIndex = state.items.findIndex(
-        (item) => item.id === action.payload
-      );
-      if (foundIndex !== -1) {
-        state.items[foundIndex].quantity = state.items[foundIndex].quantity + 1;
-      }
-    },
-
-    decreaseQuantity: (state, action) => {
-      const foundIndex = state.items.findIndex(
-        (item) => item.id === action.payload
-      );
-      if (foundIndex !== -1) {
         if (state.items[foundIndex].quantity <= 1) {
           state.items.splice(foundIndex, 1);
         } else {
-          state.items[foundIndex].quantity =
-            state.items[foundIndex].quantity - 1;
+          state.items[foundIndex].quantity--;
         }
       }
     },
