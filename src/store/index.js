@@ -3,7 +3,7 @@ import { createStore } from 'redux';
 
 const initialState = {
   items: [],
-  showCart: false,
+  isShowCart: false,
 };
 
 const cartSlice = createSlice({
@@ -11,7 +11,7 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     toggleShowCart: (state) => {
-      state.showCart = !state.showCart;
+      state.isShowCart = !state.isShowCart;
     },
 
     addItemToCart: (state, action) => {
@@ -29,6 +29,7 @@ const cartSlice = createSlice({
   },
 });
 
-const store = createStore(cartSlice);
+const store = createStore(cartSlice.reducer);
 
+export const cartActions = cartSlice.actions;
 export default store;
