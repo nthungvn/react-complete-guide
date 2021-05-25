@@ -16,3 +16,7 @@ export const authSlice = createSlice({
     },
   },
 });
+
+export const authReducer = authSlice.reducer;
+
+export const authActions = authSlice.actions;
