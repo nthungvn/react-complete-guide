@@ -15,7 +15,14 @@ const cartSlice = createSlice({
     },
 
     addItemToCart: (state, action) => {
-      state.items.push(action.payload);
+      const foundIndex = state.items.findIndex(
+        (item) => item.id === action.payload
+      );
+      if (foundIndex !== -1) {
+        state.items[foundIndex].amount = state.items[foundIndex].amount + 1;
+      } else {
+        state.items.push(action.payload);
+      }
     },
 
     removeItemFromCart: (state, action) => {
