@@ -1,0 +1,43 @@
+.notification {
+  width: 20rem;
+  max-width: 50%;
+  background: #1a8ed1;
+  padding: 0.5rem 1rem;
+  position: fixed;
+  top: 80px;
+  right: 0;
+  border-radius: 0.5rem;
+  color: white;
+  animation: appear 0.3s ease-in-out both;
+}
+
+.notification h2 {
+  margin: 0;
+  margin-bottom: 0.5rem;
+}
+
+.notification p {
+  margin: 0;
+}
+
+.error {
+  background: #690000;
+}
+
+.success {
+  background: #1ad1b9;
+}
+
+@keyframes appear {
+  0% {
+    transform: translateX(100%);
+  }
+
+  50% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
