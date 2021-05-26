@@ -72,14 +72,5 @@ export const sendCartData = (cart) => {
         })
       );
     }
-    setTimeout(() => {
-      dispatch(
-        uiActions.showNotification({
-          status: undefined,
-          message: undefined,
-          title: undefined,
-        })
-      );
-    }, 2000);
   };
 };

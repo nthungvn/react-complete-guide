@@ -5,6 +5,7 @@ import Layout from './components/Layout/Layout';
 import Products from './components/Shop/Products';
 import Notification from './components/UI/Notification';
 import { fetchCartData, sendCartData } from './store/cart-actions';
+import { uiActions } from './store/ui-slice';
 
 let isInitial = true;
 
@@ -22,6 +23,18 @@ function App() {
     if (cart.changed) {
       dispatch(sendCartData(cart));
     }
+    const timer = setTimeout(() => {
+      dispatch(
+        uiActions.showNotification({
+          status: undefined,
+          message: undefined,
+          title: undefined,
+        })
+      );
+    }, 2_000);
+    return () => {
+      clearTimeout(timer);
+    };
   }, [cart, dispatch]);
 
   useEffect(() => {
