@@ -11,7 +11,6 @@ export const fetchCartData = () => {
         throw new Error('Something went wrong!');
       }
       const cart = await response.json();
-      console.log(cart);
       dispatch(cartActions.replaceCart(cart));
     } catch (error) {
       dispatch(
@@ -48,7 +47,7 @@ export const sendCartData = (cart) => {
         'https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/cart.json',
         {
           method: 'PUT',
-          body: JSON.stringify(cart),
+          body: JSON.stringify({ items: cart.items }),
           headers: {
             'Content-Type': 'application/json',
           },
