@@ -1,0 +1,13 @@
+.products ul {
+  list-style: none;
+}
+
+.products li {
+  margin: 1rem;
+}
+
+.products a,
+.products a:visited {
+  color: #042b5f;
+  text-decoration: none;
+}
