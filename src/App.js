@@ -4,6 +4,7 @@ import Layout from './components/layout/Layout';
 import MainNavigation from './components/layout/MainNavigation';
 import AllQuotes from './pages/AllQuotes';
 import NewQuote from './pages/NewQuote';
+import QuoteDetail from './pages/QuoteDetail';
 
 function App() {
   return (
@@ -14,10 +15,12 @@ function App() {
           <Route path="/new-quotes">
             <NewQuote />
           </Route>
-          <Route path="/quotes">
+          <Route exact path="/quotes">
             <AllQuotes />
           </Route>
-          <Route path="/quotes/:quoteId"></Route>
+          <Route path="/quotes/:quoteId">
+            <QuoteDetail />
+          </Route>
         </Switch>
       </Layout>
     </Fragment>
