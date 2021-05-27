@@ -1,10 +1,10 @@
 import QuoteForm from '../components/quotes/QuoteForm';
 
 const NewQuote = (props) => {
-  return (
-    <section>
-      <QuoteForm></QuoteForm>
-    </section>
-  );
+  const addQuoteHandler = (quoteData) => {
+    console.log(quoteData);
+  };
+
+  return <QuoteForm onAddQuote={addQuoteHandler} />;
 };
 export default NewQuote;

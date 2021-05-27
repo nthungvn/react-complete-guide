@@ -1,7 +1,7 @@
 import classes from './Layout.module.css';
 
 const Layout = (props) => {
-  return <section className={classes.main}>{props.children}</section>;
+  return <main className={classes.main}>{props.children}</main>;
 };
 
 export default Layout;
