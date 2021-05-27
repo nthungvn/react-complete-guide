@@ -13,14 +13,18 @@ const sortQuotes = (quotes, isDescendingMode) => {
 
 const QuoteList = (props) => {
   const history = useHistory();
-  const { search } = useLocation();
+  const { search, pathname } = useLocation();
   const query = new URLSearchParams(search);
   const isDescendingMode = query.get('sorting') === 'desc';
 
   const sortedQuote = sortQuotes(props.quotes, isDescendingMode);
 
   const changeSortingHandler = () => {
-    history.push(`/quotes?sorting=${isDescendingMode ? 'asc' : 'desc'}`);
+    const pathConfig = {
+      pathname,
+      search: `sorting=${isDescendingMode ? 'asc' : 'desc'}`,
+    };
+    history.push(pathConfig);
   };
 
   return (
