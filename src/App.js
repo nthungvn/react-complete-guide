@@ -6,14 +6,12 @@ import Welcome from './pages/Welcome';
 function App() {
   return (
     <div>
-      <header>
-        <MainHeader />
-      </header>
+      <MainHeader />
       <main>
         <Route path="/products">
           <Products />
         </Route>
-        <Route path={['/welcome', '/']}>
+        <Route path="/welcome">
           <Welcome />
         </Route>
       </main>
