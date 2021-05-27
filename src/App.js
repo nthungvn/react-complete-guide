@@ -16,7 +16,7 @@ function App() {
           <Route path="/" exact>
             <Redirect to="/quotes" />
           </Route>
-          <Route path="/new-quotes">
+          <Route path="/new-quote">
             <NewQuote />
           </Route>
           <Route exact path="/quotes">
