@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Route, Switch } from 'react-router';
+import { Redirect, Route, Switch } from 'react-router';
 import Layout from './components/layout/Layout';
 import MainNavigation from './components/layout/MainNavigation';
 import AllQuotes from './pages/AllQuotes';
@@ -12,6 +12,9 @@ function App() {
       <MainNavigation />
       <Layout>
         <Switch>
+          <Route path="/" exact>
+            <Redirect to="/quotes" />
+          </Route>
           <Route path="/new-quotes">
             <NewQuote />
           </Route>
