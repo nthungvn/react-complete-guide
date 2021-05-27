@@ -25,7 +25,7 @@ function App() {
           <Route path="/quotes/:quoteId">
             <QuoteDetail />
           </Route>
-          <Route>
+          <Route path="*">
             <NotFound />
           </Route>
         </Switch>
