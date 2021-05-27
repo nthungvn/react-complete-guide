@@ -1,6 +1,7 @@
 import { Route, useParams, useRouteMatch } from 'react-router';
 import Comments from '../components/comments/Comments';
 import HighlightedQuote from '../components/quotes/HighlightedQuote';
+import NoQuotesFound from '../components/quotes/NoQuotesFound';
 
 const DUMMY_QUOTES = [
   {
@@ -23,7 +24,7 @@ const QuoteDetail = (props) => {
     (quote) => quote.id === params.quoteId
   );
   if (!selectedQuote) {
-    return <h2>No Quote Found</h2>;
+    return <NoQuotesFound />
   }
 
   return (
