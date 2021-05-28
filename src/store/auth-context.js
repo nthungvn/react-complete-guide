@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const initialState = {
   isAuth: false,
@@ -18,6 +18,12 @@ export const AuthProvider = (props) => {
   const logout = () => {
     setIsAuth(false);
   };
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      setIsAuth(true);
+    }
+  }, []);
 
   return (
     <authContext.Provider
