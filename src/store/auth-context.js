@@ -13,15 +13,28 @@ export const AuthContextProvider = (props) => {
   const initialToken = localStorage.getItem('token');
   const [token, setToken] = useState(initialToken);
 
-  const loginHandler = useCallback((token) => {
-    setToken(token);
+  const expireIn = localStorage.getItem('expireIn');
+  let timer;
+
+  if (expireIn) {
+    timer = setTimeout(() => {
+      logoutHandler();
+    }, expireIn - Date.now());
+  }
+
+  const loginHandler = useCallback((token, expirationTime) => {
     localStorage.setItem('token', token);
+    const expiresIn = Date.now() + expirationTime;
+    localStorage.setItem('expireIn', expiresIn);
+    setToken(token);
   }, []);
 
   const logoutHandler = useCallback(() => {
-    setToken(null);
     localStorage.removeItem('token');
-  }, []);
+    localStorage.removeItem('expireIn');
+    setToken(null);
+    clearTimeout(timer);
+  }, [timer]);
 
   const contextValue = {
     token,

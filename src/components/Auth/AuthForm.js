@@ -33,7 +33,7 @@ const AuthForm = () => {
 
   useEffect(() => {
     if (data && status === 'completed') {
-      authCtx.login(data.idToken);
+      authCtx.login(data.idToken, +data.expiresIn);
       replace('/');
     }
   }, [status, data, authCtx, replace]);
