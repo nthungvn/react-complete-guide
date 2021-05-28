@@ -1,8 +1,7 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useHistory } from 'react-router';
 import useHttp from '../../hooks/use-http';
 import { signIn, signUp } from '../../libs/firebase-api';
-import authContext from '../../store/auth-context';
+import AuthContext from '../../store/auth-context';
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
@@ -10,8 +9,7 @@ const AuthForm = () => {
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
   const { sendRequest, data, status } = useHttp(isLogin ? signIn : signUp);
-  const history = useHistory();
-  const authCtx = useContext(authContext);
+  const authCtx = useContext(AuthContext);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -30,15 +28,10 @@ const AuthForm = () => {
   };
 
   useEffect(() => {
-    if (!isLogin && status === 'completed') {
-      setIsLogin(true);
-    }
     if (data && status === 'completed') {
-      localStorage.setItem('token', data.idToken);
-      authCtx.login();
-      history.push('/');
+      authCtx.login(data.idToken);
     }
-  }, [status, data, isLogin, history, authCtx]);
+  }, [status, data, authCtx]);
 
   return (
     <section className={classes.auth}>
@@ -58,7 +51,10 @@ const AuthForm = () => {
           />
         </div>
         <div className={classes.actions}>
-          <button>{isLogin ? 'Login' : 'Create Account'}</button>
+          {status !== 'pending' && (
+            <button>{isLogin ? 'Login' : 'Create Account'}</button>
+          )}
+          {status === 'pending' && <p>Sending...</p>}
           <button
             type="button"
             className={classes.toggle}

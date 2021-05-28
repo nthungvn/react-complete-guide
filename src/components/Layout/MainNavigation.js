@@ -1,10 +1,11 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import authContext from '../../store/auth-context';
+import AuthContext from '../../store/auth-context';
 import classes from './MainNavigation.module.css';
 
 const MainNavigation = () => {
-  const authCtx = useContext(authContext);
+  const authCtx = useContext(AuthContext);
+  const isLoggedIn = authCtx.isLoggedIn;
 
   const logoutHandler = () => {
     authCtx.logout();
@@ -17,17 +18,17 @@ const MainNavigation = () => {
       </Link>
       <nav>
         <ul>
-          {!authCtx.isAuth && (
+          {!isLoggedIn && (
             <li>
               <Link to="/auth">Login</Link>
             </li>
           )}
-          {authCtx.isAuth && (
+          {isLoggedIn && (
             <li>
               <Link to="/profile">Profile</Link>
             </li>
           )}
-          {authCtx.isAuth && (
+          {isLoggedIn && (
             <li>
               <button onClick={logoutHandler}>Logout</button>
             </li>

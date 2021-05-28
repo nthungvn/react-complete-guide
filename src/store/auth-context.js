@@ -1,54 +1,50 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
 
 const initialState = {
-  isAuth: false,
+  token: null,
+  isLoggedIn: false,
   login: () => {},
   logout: () => {},
 };
 
-const authContext = React.createContext(initialState);
+const AuthContext = React.createContext(initialState);
 
-export const AuthProvider = (props) => {
-  const [isAuth, setIsAuth] = useState(false);
-  const history = useHistory();
+export const AuthContextProvider = (props) => {
+  const [token, setToken] = useState(null);
 
-  const login = () => {
-    setIsAuth(true);
-
-    setTimeout(() => {
-      setIsAuth(false);
-    }, 20_000);
+  const loginHandler = (token) => {
+    setToken(token);
+    localStorage.setItem('token', token);
   };
 
-  const logout = () => {
-    setIsAuth(false);
+  const logoutHandler = () => {
+    setToken(null);
   };
-
-  useEffect(() => {
-    if (!isAuth) {
-      localStorage.removeItem('token');
-      history.push('/auth');
-    }
-  }, [isAuth, history]);
 
   useEffect(() => {
     if (localStorage.getItem('token')) {
-      setIsAuth(true);
     }
   }, []);
 
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     localStorage.removeItem('token');
+  //     history.push('/auth');
+  //   }
+  // }, [isLoggedIn, history]);
+
+  const contextValue = {
+    token,
+    isLoggedIn: !!token,
+    login: loginHandler,
+    logout: logoutHandler,
+  };
+
   return (
-    <authContext.Provider
-      value={{
-        isAuth,
-        login,
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={contextValue}>
       {props.children}
-    </authContext.Provider>
+    </AuthContext.Provider>
   );
 };
 
-export default authContext;
+export default AuthContext;
