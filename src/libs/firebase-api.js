@@ -15,7 +15,7 @@ export const signUp = async (userData) => {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || 'Cannot create a new user!')
+    throw new Error(data.error.message || 'Cannot create a new user!')
   }
 
   return data;
@@ -37,7 +37,7 @@ export const signIn = async (userData) => {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || 'Cannot log user in!')
+    throw new Error(data.error.message || 'Cannot log user in!')
   }
 
   return data;
@@ -58,7 +58,7 @@ export const changePassword = async (userData) => {
   const data = await response.json();
 
   if (!response.ok) {
-    throw new Error(data.message || 'Cannot change password!')
+    throw new Error(data.error.message || 'Cannot change password!')
   }
 
   return data;

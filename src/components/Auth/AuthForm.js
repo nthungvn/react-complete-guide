@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router';
 import useHttp from '../../hooks/use-http';
 import { signIn, signUp } from '../../libs/firebase-api';
+import authContext from '../../store/auth-context';
 import classes from './AuthForm.module.css';
 
 const AuthForm = () => {
@@ -10,6 +11,7 @@ const AuthForm = () => {
   const passwordInputRef = useRef();
   const { sendRequest, data, status } = useHttp(isLogin ? signIn : signUp);
   const history = useHistory();
+  const authCtx = useContext(authContext);
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -33,9 +35,10 @@ const AuthForm = () => {
     }
     if (data && status === 'completed') {
       localStorage.setItem('token', data.idToken);
+      authCtx.login();
       history.push('/');
     }
-  }, [status, data, isLogin, history]);
+  }, [status, data, isLogin, history, authCtx]);
 
   return (
     <section className={classes.auth}>

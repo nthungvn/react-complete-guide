@@ -1,11 +1,15 @@
+import { useContext } from 'react';
 import { Link, useHistory } from 'react-router-dom';
-
+import authContext from '../../store/auth-context';
 import classes from './MainNavigation.module.css';
 
 const MainNavigation = () => {
   const history = useHistory();
+  const authCtx = useContext(authContext);
+
   const logoutHandler = () => {
     localStorage.removeItem('token');
+    authCtx.logout();
     history.push('/auth');
   };
 
@@ -16,15 +20,21 @@ const MainNavigation = () => {
       </Link>
       <nav>
         <ul>
-          <li>
-            <Link to="/auth">Login</Link>
-          </li>
-          <li>
-            <Link to="/profile">Profile</Link>
-          </li>
-          <li>
-            <button onClick={logoutHandler}>Logout</button>
-          </li>
+          {!authCtx.isAuth && (
+            <li>
+              <Link to="/auth">Login</Link>
+            </li>
+          )}
+          {authCtx.isAuth && (
+            <li>
+              <Link to="/profile">Profile</Link>
+            </li>
+          )}
+          {authCtx.isAuth && (
+            <li>
+              <button onClick={logoutHandler}>Logout</button>
+            </li>
+          )}
         </ul>
       </nav>
     </header>
