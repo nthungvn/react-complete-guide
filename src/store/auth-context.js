@@ -14,7 +14,7 @@ const getStoredToken = () => {
   const expireIn = localStorage.getItem('expiresAtInMs');
   const remainingTimeInMs = +expireIn - Date.now();
 
-  if (remainingTimeInMs < 0) {
+  if (remainingTimeInMs <= 0) {
     localStorage.removeItem('token');
     localStorage.removeItem('expiresAtInMs');
     return { token: null, remainingTimeInMs: 0 };
@@ -45,7 +45,7 @@ export const AuthContextProvider = (props) => {
   const logoutHandler = useCallback(() => {
     localStorage.removeItem('token');
     localStorage.removeItem('expiresAtInMs');
-    clearTimeout(timer);
+    timer && clearTimeout(timer);
     setToken(null);
   }, [timer]);
 
