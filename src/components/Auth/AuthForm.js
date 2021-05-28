@@ -8,7 +8,9 @@ const AuthForm = () => {
   const [isLogin, setIsLogin] = useState(true);
   const emailInputRef = useRef();
   const passwordInputRef = useRef();
-  const { sendRequest, data, status } = useHttp(isLogin ? signIn : signUp);
+  const { sendRequest, data, status, error } = useHttp(
+    isLogin ? signIn : signUp
+  );
   const authCtx = useContext(AuthContext);
 
   const switchAuthModeHandler = () => {
@@ -55,6 +57,7 @@ const AuthForm = () => {
             <button>{isLogin ? 'Login' : 'Create Account'}</button>
           )}
           {status === 'pending' && <p>Sending...</p>}
+          {error && <p>{error}</p>}
           <button
             type="button"
             className={classes.toggle}
