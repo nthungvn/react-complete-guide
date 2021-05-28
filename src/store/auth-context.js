@@ -9,31 +9,44 @@ const initialState = {
 
 const AuthContext = React.createContext(initialState);
 
-export const AuthContextProvider = (props) => {
-  const initialToken = localStorage.getItem('token');
-  const [token, setToken] = useState(initialToken);
+const getStoredToken = () => {
+  const storedToken = localStorage.getItem('token');
+  const expireIn = localStorage.getItem('expiresAtInMs');
+  const remainingTimeInMs = +expireIn - Date.now();
 
-  const expireIn = localStorage.getItem('expireIn');
+  if (remainingTimeInMs < 0) {
+    localStorage.removeItem('token');
+    localStorage.removeItem('expiresAtInMs');
+    return { token: null, remainingTimeInMs: 0 };
+  }
+  return { token: storedToken, remainingTimeInMs: remainingTimeInMs };
+};
+
+export const AuthContextProvider = (props) => {
+  const storedToken = getStoredToken();
+  const [token, setToken] = useState(storedToken.token);
+
+  const expireIn = storedToken.remainingTimeInMs;
   let timer;
 
-  if (expireIn) {
+  if (expireIn > 0) {
     timer = setTimeout(() => {
       logoutHandler();
-    }, expireIn - Date.now());
+    }, expireIn);
   }
 
-  const loginHandler = useCallback((token, expirationTime) => {
+  const loginHandler = useCallback((token, expiresIn) => {
     localStorage.setItem('token', token);
-    const expiresIn = Date.now() + expirationTime;
-    localStorage.setItem('expireIn', expiresIn);
+    const expiresAt = Date.now() + expiresIn * 1000;
+    localStorage.setItem('expiresAtInMs', expiresAt);
     setToken(token);
   }, []);
 
   const logoutHandler = useCallback(() => {
     localStorage.removeItem('token');
-    localStorage.removeItem('expireIn');
-    setToken(null);
+    localStorage.removeItem('expiresAtInMs');
     clearTimeout(timer);
+    setToken(null);
   }, [timer]);
 
   const contextValue = {
