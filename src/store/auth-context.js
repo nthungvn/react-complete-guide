@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 const initialState = {
   token: null,
@@ -20,18 +20,6 @@ export const AuthContextProvider = (props) => {
   const logoutHandler = useCallback(() => {
     setToken(null);
   }, []);
-
-  useEffect(() => {
-    if (localStorage.getItem('token')) {
-    }
-  }, []);
-
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     localStorage.removeItem('token');
-  //     history.push('/auth');
-  //   }
-  // }, [isLoggedIn, history]);
 
   const contextValue = {
     token,

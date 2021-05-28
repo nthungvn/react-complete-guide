@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef } from 'react';
+import { useHistory } from 'react-router';
 import useHttp from '../../hooks/use-http';
 import { changePassword } from '../../libs/firebase-api';
 import AuthContext from '../../store/auth-context';
@@ -7,7 +8,8 @@ import classes from './ProfileForm.module.css';
 const ProfileForm = () => {
   const newPasswordInputRef = useRef();
   const { sendRequest, data, status, error } = useHttp(changePassword);
-  const { token, login } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
+  const { push } = useHistory();
 
   console.log(data, status);
 
@@ -22,9 +24,9 @@ const ProfileForm = () => {
 
   useEffect(() => {
     if (data && status === 'completed') {
-      login(data.idToken);
+      push('/');
     }
-  }, [data, status, login]);
+  }, [data, status, push]);
 
   return (
     <form onSubmit={changePasswordHandler} className={classes.form}>

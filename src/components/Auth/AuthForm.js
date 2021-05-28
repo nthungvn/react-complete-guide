@@ -1,4 +1,5 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+import { useHistory } from 'react-router';
 import useHttp from '../../hooks/use-http';
 import { signIn, signUp } from '../../libs/firebase-api';
 import AuthContext from '../../store/auth-context';
@@ -12,6 +13,7 @@ const AuthForm = () => {
     isLogin ? signIn : signUp
   );
   const authCtx = useContext(AuthContext);
+  const { replace } = useHistory();
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
@@ -32,8 +34,9 @@ const AuthForm = () => {
   useEffect(() => {
     if (data && status === 'completed') {
       authCtx.login(data.idToken);
+      replace('/');
     }
-  }, [status, data, authCtx]);
+  }, [status, data, authCtx, replace]);
 
   return (
     <section className={classes.auth}>
