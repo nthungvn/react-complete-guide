@@ -20,15 +20,17 @@ const DUMMY_MEETUPS = [
   },
 ];
 const MeetUps = (props) => {
-  const [loadedMeetups, setLoadedMeetups] = useState([]);
+  return <MeetupList meetups={props.meetups} />;
+};
 
-  useEffect(() => {
-    setTimeout(() => {
-      setLoadedMeetups(DUMMY_MEETUPS);
-    }, 2000);
-  }, []);
+export const getStaticProps = () => {
+  // data call here
 
-  return <MeetupList meetups={loadedMeetups} />;
+  return {
+    props: {
+      meetups: DUMMY_MEETUPS,
+    },
+  };
 };
 
 export default MeetUps;
