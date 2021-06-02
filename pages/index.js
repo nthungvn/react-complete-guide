@@ -23,13 +23,14 @@ const MeetUps = (props) => {
   return <MeetupList meetups={props.meetups} />;
 };
 
-export const getStaticProps = () => {
+export const getStaticProps = async () => {
   // data call here
 
   return {
     props: {
       meetups: DUMMY_MEETUPS,
     },
+    revalidate: 60,
   };
 };
 
