@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import MeetupList from '../components/meetups/MeetupList';
 
 const DUMMY_MEETUPS = [
@@ -19,7 +20,15 @@ const DUMMY_MEETUPS = [
   },
 ];
 const MeetUps = (props) => {
-  return <MeetupList meetups={DUMMY_MEETUPS} />;
+  const [loadedMeetups, setLoadedMeetups] = useState([]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoadedMeetups(DUMMY_MEETUPS);
+    }, 2000);
+  }, []);
+
+  return <MeetupList meetups={loadedMeetups} />;
 };
 
 export default MeetUps;
