@@ -1,9 +1,19 @@
 import { ObjectId } from 'bson';
+import Head from 'next/head';
+import { Fragment } from 'react';
 import MeetupDetail from '../../components/meetups/MeetupDetails';
 import { connect } from '../../libs/database';
 
 const MeetupDetailsPage = (props) => {
-  return <MeetupDetail {...props.data} />;
+  return (
+    <Fragment>
+      <Head>
+        <title>{props.data.title}</title>
+        <meta name="description" content={props.data.description} />
+      </Head>
+      <MeetupDetail {...props.data} />
+    </Fragment>
+  );
 };
 
 export const getStaticPaths = async () => {

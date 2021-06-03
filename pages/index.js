@@ -1,8 +1,18 @@
+import Head from 'next/head';
+import { Fragment } from 'react';
 import MeetupList from '../components/meetups/MeetupList';
 import { connect } from '../libs/database';
 
 const MeetUps = (props) => {
-  return <MeetupList meetups={props.meetups} />;
+  return (
+    <Fragment>
+      <Head>
+        <title>React Meetups</title>
+        <meta name="description" content="Join the React meetups with us" />
+      </Head>
+      <MeetupList meetups={props.meetups} />
+    </Fragment>
+  );
 };
 
 export const getStaticProps = async () => {
