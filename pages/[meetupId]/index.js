@@ -6,25 +6,27 @@ const MeetupDetailsPage = (props) => {
   return <MeetupDetail {...props.data} />;
 };
 
-// export const getStaticPaths = async () => {
-//   const response = await fetch('http://localhost:3000/api/meetups', {
-//     headers: {
-//       'Content-Type': 'application/json',
-//     },
-//   });
-//   const data = await response.json();
-//   const paths = data.results.map((result) => ({
-//     params: { meetupId: result.id },
-//   }));
+export const getStaticPaths = async () => {
+  console.log('fab');
+  const client = await connect();
+  const results = await client
+    .db()
+    .collection('meetups')
+    .find({}, { _id: 1 })
+    .toArray();
+  client.close();
+  const paths = results.map((result) => ({
+    params: { meetupId: result._id.toString() },
+  }));
 
-//   return {
-//     fallback: false,
-//     paths: paths,
-//   };
-// };
+  return {
+    fallback: false,
+    paths: paths,
+  };
+};
 
-export const getServerSideProps = async (context) => {
-  const meetupId = context.query.meetupId;
+export const getStaticProps = async (context) => {
+  const meetupId = context.params.meetupId;
   const client = await connect();
   const result = await client
     .db()
