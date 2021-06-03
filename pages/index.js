@@ -1,21 +1,24 @@
-import { useEffect, useState } from 'react';
 import MeetupList from '../components/meetups/MeetupList';
+import { connect } from '../libs/database';
 
 const MeetUps = (props) => {
   return <MeetupList meetups={props.meetups} />;
 };
 
 export const getStaticProps = async () => {
-  const response = await fetch('http://localhost:3000/api/meetups', {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
-  const meetups = await response.json();
+  const client = await connect();
+  const results = await client.db().collection('meetups').find().toArray();
+  console.log(results);
+  const responseData = results.map((result) => ({
+    id: result._id.toString(),
+    title: result.title,
+    address: result.address,
+    image: result.image,
+  }));
 
   return {
     props: {
-      meetups: meetups.results,
+      meetups: responseData,
     },
     revalidate: 60,
   };
