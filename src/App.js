@@ -46,9 +46,6 @@ class App extends Component {
           onExited={() => console.log('Exited')}
         >
           {(state) => {
-            const opacityVal =
-              state === 'exiting' ? 0 : state === 'entering' ? 1 : null;
-
             return (
               <div
                 style={{
@@ -57,7 +54,7 @@ class App extends Component {
                   height: 100,
                   margin: 'auto',
                   transition: 'all 1s ease-out',
-                  opacity: opacityVal,
+                  opacity: state === 'exiting' ? 0 : 1,
                 }}
               ></div>
             );
