@@ -12,11 +12,11 @@
   width: 50%;
 }
 
-.Modal-enter-active {
+.Modal.Open {
   animation: open-modal 0.4s ease-out forwards;
 }
 
-.Modal-exit-active {
+.Modal.Close {
   animation: close-modal 0.5s ease-out forwards;
 }
 
