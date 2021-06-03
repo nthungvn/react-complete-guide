@@ -7,7 +7,6 @@ const MeetupDetailsPage = (props) => {
 };
 
 export const getStaticPaths = async () => {
-  console.log('fab');
   const client = await connect();
   const results = await client
     .db()

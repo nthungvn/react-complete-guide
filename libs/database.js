@@ -21,7 +21,6 @@ export const connect = async () => {
     return client;
   } catch (error) {
     const message = 'Cannot connect to Mongo';
-    console.log(message);
     throw new Error(message);
   }
 };

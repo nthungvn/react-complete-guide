@@ -8,7 +8,6 @@ const MeetUps = (props) => {
 export const getStaticProps = async () => {
   const client = await connect();
   const results = await client.db().collection('meetups').find().toArray();
-  console.log(results);
   const responseData = results.map((result) => ({
     id: result._id.toString(),
     title: result.title,
