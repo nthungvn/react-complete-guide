@@ -21,11 +21,14 @@ class App extends Component {
     return (
       <div className="App">
         <h1>React Animations</h1>
-        <Modal
-          show={this.state.modalIsOpen}
-          closed={this.closeModalHandler.bind(this)}
-        />
-        <Backdrop show={this.state.modalIsOpen} />
+
+        {this.state.modalIsOpen && (
+          <Modal
+            show={this.state.modalIsOpen}
+            closed={this.closeModalHandler.bind(this)}
+          />
+        )}
+        {this.state.modalIsOpen && <Backdrop show={this.state.modalIsOpen} />}
         <button className="Button" onClick={this.openModalHandler.bind(this)}>
           Open Modal
         </button>
