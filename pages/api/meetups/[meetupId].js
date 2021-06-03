@@ -1,16 +1,18 @@
 import { ObjectId } from 'bson';
-import { getDb } from '../../../libs/database';
+import { connect } from '../../../libs/database';
 
 const handler = async (req, res) => {
   if (req.method === 'GET') {
     const { meetupId } = req.query;
-    const db = await getDb();
-    const result = await db
+    const client = await connect();
+    const result = await client
+      .db()
       .collection('meetups')
       .findOne({ _id: ObjectId(meetupId) });
     if (!result) {
       return res.json(404).json({ message: 'Not Found' });
     }
+    client.close();
     console.log(result);
 
     return res.json({

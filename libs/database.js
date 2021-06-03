@@ -1,4 +1,4 @@
-import { Db, MongoClient } from 'mongodb';
+import { MongoClient } from 'mongodb';
 
 const MONGO_USER = process.env.MONGO_USER;
 const MONGO_PASS = process.env.MONGO_PASS;
@@ -6,9 +6,9 @@ const MONGO_DB = 'nextjs';
 
 /**
  *
- * @returns {Db}
+ * @returns {Promise<MongoClient>}
  */
-export const getDb = async () => {
+export const connect = async () => {
   try {
     let client = await MongoClient.connect(
       `mongodb+srv://${MONGO_USER}:${MONGO_PASS}@cluster0.oipin.mongodb.net/${MONGO_DB}?retryWrites=true&w=majority`,
@@ -18,7 +18,7 @@ export const getDb = async () => {
       }
     );
     console.log('Connected to Mongo');
-    return client.db();
+    return client;
   } catch (error) {
     const message = 'Cannot connect to Mongo';
     console.log(message);

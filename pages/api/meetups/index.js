@@ -1,9 +1,9 @@
-import { getDb } from '../../../libs/database';
+import { connect } from '../../../libs/database';
 
 const handler = async (req, res) => {
   if (req.method === 'GET') {
-    const db = await getDb();
-    const results = await db.collection('meetups').find().toArray();
+    const client = await connect();
+    const results = await client.db().collection('meetups').find().toArray();
     console.log(results);
     const responseData = results.map((result) => ({
       id: result._id,
@@ -12,6 +12,7 @@ const handler = async (req, res) => {
       image: result.image,
       description: result.description,
     }));
+    client.close();
     return res.json({ results: responseData });
   }
   return res.status(404).json({ message: 'Not Found' });
