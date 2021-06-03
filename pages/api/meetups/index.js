@@ -1,4 +1,4 @@
-import { getDb } from '../../libs/database';
+import { getDb } from '../../../libs/database';
 
 const handler = async (req, res) => {
   if (req.method === 'GET') {

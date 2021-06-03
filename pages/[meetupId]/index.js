@@ -4,33 +4,34 @@ const MeetupDetailsPage = (props) => {
   return <MeetupDetail {...props.data} />;
 };
 
-export const getStaticPaths = () => {
-  return {
-    fallback: false,
-    paths: [
-      {
-        params: { meetupId: 'm1' },
-      },
-      {
-        params: { meetupId: 'm2' },
-      },
-    ],
-  };
-};
+// export const getStaticPaths = async () => {
+//   const response = await fetch('http://localhost:3000/api/meetups', {
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//   });
+//   const data = await response.json();
+//   const paths = data.results.map((result) => ({
+//     params: { meetupId: result.id },
+//   }));
 
-export const getStaticProps = (context) => {
-  const meetupId = context.params;
+//   return {
+//     fallback: false,
+//     paths: paths,
+//   };
+// };
+
+export const getServerSideProps = async (context) => {
+  const meetupId = context.query.meetupId;
+  const response = await fetch(
+    'http://localhost:3000/api/meetups/' + meetupId,
+    { headers: { 'Content-Type': 'application/json' } }
+  );
+  const data = await response.json();
 
   return {
     props: {
-      data: {
-        id: meetupId,
-        title: 'Learn Next.js together',
-        image:
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3b/Frauenkirche_and_Neues_Rathaus_Munich_March_2013.JPG/640px-Frauenkirche_and_Neues_Rathaus_Munich_March_2013.JPG',
-        address: 'Munich',
-        description: 'A great place that we can share our knowledge',
-      },
+      data: data.result,
     },
   };
 };
