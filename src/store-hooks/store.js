@@ -8,7 +8,7 @@ export const useStore = () => {
   const [, setState] = useState(globalState);
 
   const dispatch = (actionIdentifier, payload) => {
-    const newState = actions[actionIdentifier](payload);
+    const newState = actions[actionIdentifier](globalState, payload);
     globalState = { ...globalState, ...newState };
 
     listeners.forEach((listener) => listener(globalState));
