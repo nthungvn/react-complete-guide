@@ -11,7 +11,7 @@ export const configureProductsStore = () => {
         isFavorite: newFavStatus,
       };
 
-      return { updatedProducts };
+      return { products: updatedProducts };
     },
   };
 
