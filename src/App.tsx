@@ -1,9 +1,11 @@
-function App() {
+import Todos from './components/Todos';
+
+const App = () => {
   return (
     <div>
-      <h2>Let's get started!</h2>
+      <Todos />
     </div>
   );
-}
+};
 
 export default App;
