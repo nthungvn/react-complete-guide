@@ -6,8 +6,21 @@ import Search from './Search';
 function Ingredients() {
   const [ingredients, setIngredients] = useState([]);
 
-  const addIngredientHandler = (ingredientData) => {
-    setIngredients((prevIngredients) => prevIngredients.concat(ingredientData));
+  const addIngredientHandler = (ingredient) => {
+    fetch(
+      'https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json',
+      {
+        method: 'POST',
+        body: JSON.stringify(ingredient),
+        headers: { 'Content-Type': 'application/json' },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        setIngredients((prevIngredients) =>
+          prevIngredients.concat({ id: data.name, ...ingredient })
+        );
+      });
   };
 
   const removeIngredientHandler = (ingredientId) => {
