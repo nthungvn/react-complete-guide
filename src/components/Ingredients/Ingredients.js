@@ -1,4 +1,5 @@
-import { useCallback, useReducer } from 'react';
+import { useCallback, useContext, useReducer } from 'react';
+import { AuthContext } from '../../context/auth-context';
 import ErrorModal from '../UI/ErrorModal';
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
@@ -71,6 +72,7 @@ function Ingredients() {
     reducerFn,
     initialState
   );
+  const authCtx = useContext(AuthContext);
 
   const addIngredientHandler = (ingredient) => {
     dispatch({ type: 'SENDING' });
@@ -134,9 +136,18 @@ function Ingredients() {
     dispatch({ type: 'CLEAR_ERROR' });
   };
 
+  const logoutHandler = () => {
+    authCtx.logout();
+  };
+
   return (
     <div className="App">
       {error && <ErrorModal onClose={closeModalHandler}>{error}</ErrorModal>}
+
+      <div style={{ margin: '0 auto', textAlign: 'center' }}>
+        <h2>Welcome</h2>
+        <button onClick={logoutHandler}>Logout</button>
+      </div>
 
       <IngredientForm
         onAddIngredient={addIngredientHandler}
