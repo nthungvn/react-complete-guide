@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Card from '../UI/Card';
+import ErrorModal from '../UI/ErrorModal';
 import LoadingIndicator from '../UI/LoadingIndicator';
 import './Search.css';
 
@@ -10,6 +11,7 @@ const Search = React.memo((props) => {
   const [enteredSearchText, setEnteredSearchText] = useState('');
   const searchTextInputRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
   const onSearch = props.onSearch;
 
   const changeSearchTextHandler = (event) => {
@@ -27,7 +29,12 @@ const Search = React.memo((props) => {
           : '';
         const ingredients = [];
         fetch(url + query)
-          .then((response) => response.json())
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error('Failed to add ingredient');
+            }
+            return response.json();
+          })
           .then((data) => {
             for (let key in data) {
               const ingredient = data[key];
@@ -38,7 +45,7 @@ const Search = React.memo((props) => {
             setIsLoading(false);
           })
           .catch((error) => {
-            setIsLoading(false);
+            setError(error.message || 'Something went wrong');
           });
       }
     }, 500);
@@ -48,8 +55,14 @@ const Search = React.memo((props) => {
     };
   }, [enteredSearchText, onSearch]);
 
+  const closeModalHandler = () => {
+    setError(null);
+    setIsLoading(false);
+  };
+
   return (
     <section className="search">
+      {error && <ErrorModal onClose={closeModalHandler}>{error}</ErrorModal>}
       <Card>
         <div className="search-input">
           <label>Filter by Title</label>
@@ -59,7 +72,7 @@ const Search = React.memo((props) => {
             onChange={changeSearchTextHandler}
             ref={searchTextInputRef}
           />
-        {isLoading && <LoadingIndicator />}
+          {isLoading && <LoadingIndicator />}
         </div>
       </Card>
     </section>

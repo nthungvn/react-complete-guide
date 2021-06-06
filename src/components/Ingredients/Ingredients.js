@@ -33,7 +33,6 @@ function Ingredients() {
       })
       .catch((error) => {
         setError(error.message || 'Something went wrong');
-        setIsLoading(false);
       });
   };
 
@@ -62,7 +61,6 @@ function Ingredients() {
       })
       .catch((error) => {
         setError(error.message || 'Something went wrong');
-        setIsLoading(false);
       });
   };
 
@@ -72,10 +70,13 @@ function Ingredients() {
 
   const closeModalHandler = () => {
     setError(null);
+    setIsLoading(false);
   };
 
   return (
     <div className="App">
+      {error && <ErrorModal onClose={closeModalHandler}>{error}</ErrorModal>}
+
       <IngredientForm
         onAddIngredient={addIngredientHandler}
         isLoading={isLoading}
@@ -88,8 +89,6 @@ function Ingredients() {
           onRemoveItem={removeIngredientHandler}
         />
       </section>
-
-      {error && <ErrorModal onClose={closeModalHandler}>{error}</ErrorModal>}
     </div>
   );
 }
