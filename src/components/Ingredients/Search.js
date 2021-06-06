@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Card from '../UI/Card';
+import LoadingIndicator from '../UI/LoadingIndicator';
 import './Search.css';
 
 const url =
@@ -8,6 +9,7 @@ const url =
 const Search = React.memo((props) => {
   const [enteredSearchText, setEnteredSearchText] = useState('');
   const searchTextInputRef = useRef();
+  const [isLoading, setIsLoading] = useState(false);
   const onSearch = props.onSearch;
 
   const changeSearchTextHandler = (event) => {
@@ -18,6 +20,7 @@ const Search = React.memo((props) => {
   useEffect(() => {
     let timer;
     timer = setTimeout(() => {
+      setIsLoading(true);
       if (enteredSearchText === searchTextInputRef.current.value) {
         const query = enteredSearchText
           ? `?orderBy="title"&equalTo="${enteredSearchText}"`
@@ -31,6 +34,11 @@ const Search = React.memo((props) => {
               ingredients.push({ id: key, ...ingredient });
             }
             onSearch(ingredients);
+
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            setIsLoading(false);
           });
       }
     }, 500);
@@ -51,6 +59,7 @@ const Search = React.memo((props) => {
             onChange={changeSearchTextHandler}
             ref={searchTextInputRef}
           />
+        {isLoading && <LoadingIndicator />}
         </div>
       </Card>
     </section>

@@ -8,8 +8,10 @@ const url =
 
 function Ingredients() {
   const [ingredients, setIngredients] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const addIngredientHandler = (ingredient) => {
+    setIsLoading(true);
     fetch(url, {
       method: 'POST',
       body: JSON.stringify(ingredient),
@@ -20,10 +22,15 @@ function Ingredients() {
         setIngredients((prevIngredients) =>
           prevIngredients.concat({ id: data.name, ...ingredient })
         );
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
       });
   };
 
   const removeIngredientHandler = (ingredientId) => {
+    setIsLoading(true);
     const url = `https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients/${ingredientId}.json`;
     fetch(url, {
       method: 'DELETE',
@@ -38,6 +45,10 @@ function Ingredients() {
             )
           );
         }
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        setIsLoading(false);
       });
   };
 
@@ -47,7 +58,10 @@ function Ingredients() {
 
   return (
     <div className="App">
-      <IngredientForm onAddIngredient={addIngredientHandler} />
+      <IngredientForm
+        onAddIngredient={addIngredientHandler}
+        isLoading={isLoading}
+      />
 
       <section>
         <Search onSearch={searchHandler} />
