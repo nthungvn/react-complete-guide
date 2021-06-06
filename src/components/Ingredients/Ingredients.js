@@ -10,7 +10,11 @@ function Ingredients() {
     setIngredients((prevIngredients) => prevIngredients.concat(ingredientData));
   };
 
-  const removeIngredientHandler = (ingredientId) => {};
+  const removeIngredientHandler = (ingredientId) => {
+    setIngredients((prevIngredients) =>
+      prevIngredients.filter((ingredient) => ingredient.id !== ingredientId)
+    );
+  };
 
   return (
     <div className="App">
