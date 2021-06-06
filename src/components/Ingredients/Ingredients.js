@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
 import Search from './Search';
@@ -22,20 +22,6 @@ function Ingredients() {
         );
       });
   };
-
-  useEffect(() => {
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => {
-        const ingredients = [];
-
-        for (let key in data) {
-          const ingredient = data[key];
-          ingredients.push({ id: key, ...ingredient });
-        }
-        setIngredients(ingredients);
-      });
-  }, []);
 
   const removeIngredientHandler = (ingredientId) => {
     setIngredients((prevIngredients) =>
