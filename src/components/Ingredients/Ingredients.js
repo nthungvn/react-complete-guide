@@ -1,132 +1,82 @@
-import { useCallback, useContext, useMemo, useReducer } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useReducer } from 'react';
 import { AuthContext } from '../../context/auth-context';
+import useHttp from '../../hooks/use-http';
 import ErrorModal from '../UI/ErrorModal';
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
 import Search from './Search';
 
-const url =
-  'https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json';
+const baseUrl =
+  'https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app';
+const ADD_INGREDIENT = 'ADD_INGREDIENT';
+const REMOVE_INGREDIENT = 'REMOVE_INGREDIENT';
 
-const initialState = {
-  ingredients: [],
-  isLoading: false,
-  error: null,
-};
-
-const reducerFn = (state, action) => {
-  if (action.type === 'SENDING') {
-    return {
-      ...state,
-      isLoading: true,
-      error: null,
-    };
-  }
-
-  if (action.type === 'ADD_INGREDIENT') {
-    return {
-      ingredients: state.ingredients.concat(action.ingredient),
-      isLoading: false,
-      error: null,
-    };
-  }
-
-  if (action.type === 'REMOVE_INGREDIENT') {
-    return {
-      ingredients: state.ingredients.filter(
+const ingredientsReducer = (state, action) => {
+  switch (action.type) {
+    case ADD_INGREDIENT:
+      return state.concat(action.ingredient);
+    case REMOVE_INGREDIENT:
+      return state.filter(
         (ingredient) => ingredient.id !== action.ingredientId
-      ),
-      isLoading: false,
-      error: null,
-    };
+      );
+    case 'SET_INGREDIENTS':
+      return action.ingredients;
+    default:
+      throw new Error('Should not be reached!');
   }
-
-  if (action.type === 'ERROR') {
-    return {
-      ...state,
-      isLoading: false,
-      error: action.error,
-    };
-  }
-
-  if (action.type === 'CLEAR_ERROR') {
-    return {
-      ...state,
-      isLoading: false,
-      error: null,
-    };
-  }
-
-  if (action.type === 'SET_INGREDIENTS') {
-    return {
-      ...state,
-      ingredients: action.ingredients,
-    };
-  }
-
-  return state;
 };
 
 function Ingredients() {
-  const [{ ingredients, isLoading, error }, dispatch] = useReducer(
-    reducerFn,
-    initialState
-  );
+  const [ingredients, dispatch] = useReducer(ingredientsReducer, []);
   const authCtx = useContext(AuthContext);
+  const { sendRequest, data, isLoading, error, extra, identifier } = useHttp();
 
-  const addIngredientHandler = (ingredient) => {
-    dispatch({ type: 'SENDING' });
-    fetch(url, {
-      method: 'POST',
-      body: JSON.stringify(ingredient),
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to add ingredient');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        dispatch({
-          type: 'ADD_INGREDIENT',
-          ingredient: { id: data.name, ...ingredient },
-        });
-      })
-      .catch((error) => {
-        dispatch({
-          type: 'ERROR',
-          error: error.message || 'Something went wrong',
-        });
+  useEffect(() => {
+    if (error || isLoading) {
+      return;
+    }
+    if (identifier === ADD_INGREDIENT) {
+      return dispatch({
+        type: ADD_INGREDIENT,
+        ingredient: { id: data.name, ...extra },
       });
-  };
+    }
+    if (identifier === REMOVE_INGREDIENT) {
+      return dispatch({
+        type: REMOVE_INGREDIENT,
+        ingredientId: extra,
+      });
+    }
+  }, [data, isLoading, error, extra, identifier]);
 
-  const removeIngredientHandler = useCallback((ingredientId) => {
-    dispatch({ type: 'SENDING' });
-    const url = `https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients/${ingredientId}.json`;
-    fetch(url, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Failed to add ingredient');
-        }
-        return response.ok;
-      })
-      .then((_) => {
-        dispatch({
-          type: 'REMOVE_INGREDIENT',
-          ingredientId: ingredientId,
-        });
-      })
-      .catch((error) => {
-        dispatch({
-          type: 'ERROR',
-          error: error.message || 'Something went wrong',
-        });
-      });
-  }, []);
+  const addIngredientHandler = useCallback(
+    (ingredient) => {
+      const requestConfig = {
+        url: `${baseUrl}/ingredients.jsson`,
+        method: 'POST',
+        body: ingredient,
+        headers: { 'Content-Type': 'application/json' },
+        extra: ingredient,
+        identifier: ADD_INGREDIENT,
+      };
+      sendRequest(requestConfig);
+    },
+    [sendRequest]
+  );
+
+  const removeIngredientHandler = useCallback(
+    (ingredientId) => {
+      const requestConfig = {
+        url: `${baseUrl}/ingredients/${ingredientId}.json`,
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        extra: ingredientId,
+        identifier: REMOVE_INGREDIENT,
+      };
+      sendRequest(requestConfig);
+    },
+    [sendRequest]
+  );
 
   const searchHandler = useCallback((searchedIngredients) => {
     dispatch({ type: 'SET_INGREDIENTS', ingredients: searchedIngredients });
