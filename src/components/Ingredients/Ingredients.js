@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import ErrorModal from '../UI/ErrorModal';
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
 import Search from './Search';
@@ -9,6 +10,7 @@ const url =
 function Ingredients() {
   const [ingredients, setIngredients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const addIngredientHandler = (ingredient) => {
     setIsLoading(true);
@@ -17,7 +19,12 @@ function Ingredients() {
       body: JSON.stringify(ingredient),
       headers: { 'Content-Type': 'application/json' },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to add ingredient');
+        }
+        return response.json();
+      })
       .then((data) => {
         setIngredients((prevIngredients) =>
           prevIngredients.concat({ id: data.name, ...ingredient })
@@ -25,6 +32,7 @@ function Ingredients() {
         setIsLoading(false);
       })
       .catch((error) => {
+        setError(error.message || 'Something went wrong');
         setIsLoading(false);
       });
   };
@@ -36,7 +44,12 @@ function Ingredients() {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     })
-      .then((response) => response.ok)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Failed to add ingredient');
+        }
+        return response.ok;
+      })
       .then((success) => {
         if (success) {
           setIngredients((prevIngredients) =>
@@ -48,6 +61,7 @@ function Ingredients() {
         setIsLoading(false);
       })
       .catch((error) => {
+        setError(error.message || 'Something went wrong');
         setIsLoading(false);
       });
   };
@@ -55,6 +69,10 @@ function Ingredients() {
   const searchHandler = useCallback((searchedIngredients) => {
     setIngredients(searchedIngredients);
   }, []);
+
+  const closeModalHandler = () => {
+    setError(null);
+  };
 
   return (
     <div className="App">
@@ -70,6 +88,8 @@ function Ingredients() {
           onRemoveItem={removeIngredientHandler}
         />
       </section>
+
+      {error && <ErrorModal onClose={closeModalHandler}>{error}</ErrorModal>}
     </div>
   );
 }
