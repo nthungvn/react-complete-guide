@@ -24,9 +24,21 @@ function Ingredients() {
   };
 
   const removeIngredientHandler = (ingredientId) => {
-    setIngredients((prevIngredients) =>
-      prevIngredients.filter((ingredient) => ingredient.id !== ingredientId)
-    );
+    const url = `https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients/${ingredientId}.json`;
+    fetch(url, {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((response) => response.ok)
+      .then((success) => {
+        if (success) {
+          setIngredients((prevIngredients) =>
+            prevIngredients.filter(
+              (ingredient) => ingredient.id !== ingredientId
+            )
+          );
+        }
+      });
   };
 
   const searchHandler = useCallback((searchedIngredients) => {
