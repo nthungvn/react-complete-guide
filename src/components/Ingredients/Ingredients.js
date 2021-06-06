@@ -8,6 +8,7 @@ const url =
 
 function Ingredients() {
   const [ingredients, setIngredients] = useState([]);
+  const [enteredSearchText, setEnteredSearchText] = useState('');
 
   const addIngredientHandler = (ingredient) => {
     fetch(url, {
@@ -43,14 +44,25 @@ function Ingredients() {
     );
   };
 
+  const searchHandler = (searchText) => {
+    setEnteredSearchText(searchText);
+  };
+
+  let searchIngredients = [...ingredients];
+  if (enteredSearchText) {
+    searchIngredients = ingredients.filter((ingredient) =>
+      ingredient.title.includes(enteredSearchText)
+    );
+  }
+
   return (
     <div className="App">
       <IngredientForm onAddIngredient={addIngredientHandler} />
 
       <section>
-        <Search />
+        <Search onSearch={searchHandler} />
         <IngredientList
-          ingredients={ingredients}
+          ingredients={searchIngredients}
           onRemoveItem={removeIngredientHandler}
         />
       </section>
