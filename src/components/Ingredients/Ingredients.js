@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
 import Search from './Search';
@@ -8,7 +8,6 @@ const url =
 
 function Ingredients() {
   const [ingredients, setIngredients] = useState([]);
-  const [enteredSearchText, setEnteredSearchText] = useState('');
 
   const addIngredientHandler = (ingredient) => {
     fetch(url, {
@@ -44,16 +43,9 @@ function Ingredients() {
     );
   };
 
-  const searchHandler = (searchText) => {
-    setEnteredSearchText(searchText);
-  };
-
-  let searchIngredients = [...ingredients];
-  if (enteredSearchText) {
-    searchIngredients = ingredients.filter((ingredient) =>
-      ingredient.title.includes(enteredSearchText)
-    );
-  }
+  const searchHandler = useCallback((searchedIngredients) => {
+    setIngredients(searchedIngredients);
+  }, []);
 
   return (
     <div className="App">
@@ -62,7 +54,7 @@ function Ingredients() {
       <section>
         <Search onSearch={searchHandler} />
         <IngredientList
-          ingredients={searchIngredients}
+          ingredients={ingredients}
           onRemoveItem={removeIngredientHandler}
         />
       </section>
