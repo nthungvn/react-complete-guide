@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useReducer } from 'react';
 import ErrorModal from '../UI/ErrorModal';
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
@@ -7,13 +7,73 @@ import Search from './Search';
 const url =
   'https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json';
 
+const initialState = {
+  ingredients: [],
+  isLoading: false,
+  error: null,
+};
+
+const reducerFn = (state, action) => {
+  if (action.type === 'SENDING') {
+    return {
+      ingredients: [...state.ingredients],
+      isLoading: true,
+      error: null,
+    };
+  }
+
+  if (action.type === 'ADD_INGREDIENT') {
+    return {
+      ingredients: state.ingredients.concat(action.ingredient),
+      isLoading: false,
+      error: null,
+    };
+  }
+
+  if (action.type === 'REMOVE_INGREDIENT') {
+    return {
+      ingredients: state.ingredients.filter(
+        (ingredient) => ingredient.id !== action.ingredientId
+      ),
+      isLoading: false,
+      error: null,
+    };
+  }
+
+  if (action.type === 'ERROR') {
+    return {
+      ingredients: [...state.ingredients],
+      isLoading: false,
+      error: action.error,
+    };
+  }
+
+  if (action.type === 'CLEAR_ERROR') {
+    return {
+      ingredients: [...state.ingredients],
+      isLoading: false,
+      error: null,
+    };
+  }
+
+  if (action.type === 'SET_INGREDIENTS') {
+    return {
+      ...state,
+      ingredients: action.ingredients,
+    };
+  }
+
+  return state;
+};
+
 function Ingredients() {
-  const [ingredients, setIngredients] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [{ ingredients, isLoading, error }, dispatch] = useReducer(
+    reducerFn,
+    initialState
+  );
 
   const addIngredientHandler = (ingredient) => {
-    setIsLoading(true);
+    dispatch({ type: 'SENDING' });
     fetch(url, {
       method: 'POST',
       body: JSON.stringify(ingredient),
@@ -26,18 +86,21 @@ function Ingredients() {
         return response.json();
       })
       .then((data) => {
-        setIngredients((prevIngredients) =>
-          prevIngredients.concat({ id: data.name, ...ingredient })
-        );
-        setIsLoading(false);
+        dispatch({
+          type: 'ADD_INGREDIENT',
+          ingredient: { id: data.name, ...ingredient },
+        });
       })
       .catch((error) => {
-        setError(error.message || 'Something went wrong');
+        dispatch({
+          type: 'ERROR',
+          error: error.message || 'Something went wrong',
+        });
       });
   };
 
   const removeIngredientHandler = (ingredientId) => {
-    setIsLoading(true);
+    dispatch({ type: 'SENDING' });
     const url = `https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients/${ingredientId}.json`;
     fetch(url, {
       method: 'DELETE',
@@ -49,28 +112,26 @@ function Ingredients() {
         }
         return response.ok;
       })
-      .then((success) => {
-        if (success) {
-          setIngredients((prevIngredients) =>
-            prevIngredients.filter(
-              (ingredient) => ingredient.id !== ingredientId
-            )
-          );
-        }
-        setIsLoading(false);
+      .then((_) => {
+        dispatch({
+          type: 'REMOVE_INGREDIENT',
+          ingredientId: ingredientId,
+        });
       })
       .catch((error) => {
-        setError(error.message || 'Something went wrong');
+        dispatch({
+          type: 'ERROR',
+          error: error.message || 'Something went wrong',
+        });
       });
   };
 
   const searchHandler = useCallback((searchedIngredients) => {
-    setIngredients(searchedIngredients);
+    dispatch({ type: 'SET_INGREDIENTS', ingredients: searchedIngredients });
   }, []);
 
   const closeModalHandler = () => {
-    setError(null);
-    setIsLoading(false);
+    dispatch({ type: 'CLEAR_ERROR' });
   };
 
   return (
