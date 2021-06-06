@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import useHttp from '../../hooks/use-http';
 import Card from '../UI/Card';
 import ErrorModal from '../UI/ErrorModal';
-import LoadingIndicator from '../UI/LoadingIndicator';
 import './Search.css';
 
 const url =
@@ -56,13 +55,13 @@ const Search = React.memo((props) => {
       <Card>
         <div className="search-input">
           <label>Filter by Title</label>
+          {isLoading && <span>Loading...</span>}
           <input
             type="text"
             value={enteredSearchText}
             onChange={changeSearchTextHandler}
             ref={searchTextInputRef}
           />
-          {isLoading && <LoadingIndicator />}
         </div>
       </Card>
     </section>

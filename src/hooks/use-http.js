@@ -10,7 +10,11 @@ const initialState = {
 
 const httpReducer = (state, action) => {
   if (action.type === 'SENDING') {
-    return initialState;
+    return {
+      data: null,
+      isLoading: true,
+      error: null,
+    };
   }
 
   if (action.type === 'ERROR') {
