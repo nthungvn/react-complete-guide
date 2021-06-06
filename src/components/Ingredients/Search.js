@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import useHttp from '../../hooks/use-http';
 import Card from '../UI/Card';
 import ErrorModal from '../UI/ErrorModal';
 import LoadingIndicator from '../UI/LoadingIndicator';
@@ -11,8 +12,7 @@ const Search = React.memo((props) => {
   console.log('Search');
   const [enteredSearchText, setEnteredSearchText] = useState('');
   const searchTextInputRef = useRef();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { sendRequest, data, isLoading, error, clear } = useHttp();
   const onSearch = props.onSearch;
 
   const changeSearchTextHandler = (event) => {
@@ -23,47 +23,36 @@ const Search = React.memo((props) => {
   useEffect(() => {
     let timer;
     timer = setTimeout(() => {
-      setIsLoading(true);
       if (enteredSearchText === searchTextInputRef.current.value) {
         const query = enteredSearchText
           ? `?orderBy="title"&equalTo="${enteredSearchText}"`
           : '';
-        const ingredients = [];
-        fetch(url + query)
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error('Failed to add ingredient');
-            }
-            return response.json();
-          })
-          .then((data) => {
-            for (let key in data) {
-              const ingredient = data[key];
-              ingredients.push({ id: key, ...ingredient });
-            }
-            onSearch(ingredients);
-
-            setIsLoading(false);
-          })
-          .catch((error) => {
-            setError(error.message || 'Something went wrong');
-          });
+        const requestConfig = {
+          url: url + query,
+        };
+        sendRequest(requestConfig);
       }
     }, 500);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [enteredSearchText, onSearch]);
+  }, [enteredSearchText, sendRequest]);
 
-  const closeModalHandler = () => {
-    setError(null);
-    setIsLoading(false);
-  };
+  useEffect(() => {
+    if (!isLoading && !error && data) {
+      const ingredients = [];
+      for (let key in data) {
+        const ingredient = data[key];
+        ingredients.push({ id: key, ...ingredient });
+      }
+      onSearch(ingredients);
+    }
+  }, [onSearch, data, isLoading, error]);
 
   return (
     <section className="search">
-      {error && <ErrorModal onClose={closeModalHandler}>{error}</ErrorModal>}
+      {error && <ErrorModal onClose={clear}>{error}</ErrorModal>}
       <Card>
         <div className="search-input">
           <label>Filter by Title</label>

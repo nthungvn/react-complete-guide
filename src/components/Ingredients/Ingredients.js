@@ -29,7 +29,8 @@ const ingredientsReducer = (state, action) => {
 function Ingredients() {
   const [ingredients, dispatch] = useReducer(ingredientsReducer, []);
   const authCtx = useContext(AuthContext);
-  const { sendRequest, data, isLoading, error, extra, identifier } = useHttp();
+  const { sendRequest, data, isLoading, error, extra, identifier, clear } =
+    useHttp();
 
   useEffect(() => {
     if (error || isLoading) {
@@ -52,7 +53,7 @@ function Ingredients() {
   const addIngredientHandler = useCallback(
     (ingredient) => {
       const requestConfig = {
-        url: `${baseUrl}/ingredients.jsson`,
+        url: `${baseUrl}/ingredients.json`,
         method: 'POST',
         body: ingredient,
         headers: { 'Content-Type': 'application/json' },
@@ -82,10 +83,6 @@ function Ingredients() {
     dispatch({ type: 'SET_INGREDIENTS', ingredients: searchedIngredients });
   }, []);
 
-  const closeModalHandler = useCallback(() => {
-    dispatch({ type: 'CLEAR_ERROR' });
-  }, []);
-
   const logoutHandler = () => {
     authCtx.logout();
   };
@@ -102,7 +99,7 @@ function Ingredients() {
 
   return (
     <div className="App">
-      {error && <ErrorModal onClose={closeModalHandler}>{error}</ErrorModal>}
+      {error && <ErrorModal onClose={clear}>{error}</ErrorModal>}
 
       <div style={{ margin: '0 auto', textAlign: 'center' }}>
         <h2>Welcome</h2>

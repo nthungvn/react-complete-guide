@@ -31,12 +31,8 @@ const httpReducer = (state, action) => {
     };
   }
 
-  if (action.type === 'CLEAR_ERROR') {
-    return {
-      data: state.data,
-      isLoading: false,
-      error: null,
-    };
+  if (action.type === 'CLEAR') {
+    return initialState;
   }
 
   return state;
@@ -45,13 +41,17 @@ const httpReducer = (state, action) => {
 const useHttp = () => {
   const [state, dispatch] = useReducer(httpReducer, initialState);
 
+  const clear = useCallback(() => {
+    dispatch({ type: 'CLEAR' });
+  }, []);
+
   const sendRequest = useCallback(async (requestConfig) => {
     dispatch({ type: 'SENDING' });
     try {
       const response = await fetch(requestConfig.url, {
         method: requestConfig.method || 'GET',
-        body: JSON.stringify(requestConfig.body),
-        headers: requestConfig.headers || null,
+        body: requestConfig.body ? JSON.stringify(requestConfig.body) : null,
+        headers: { 'Content-Type': 'application/json' },
       });
       if (!response.ok) {
         throw new Error('Failed to send request');
@@ -71,7 +71,7 @@ const useHttp = () => {
     }
   }, []);
 
-  return { sendRequest, ...state };
+  return { sendRequest, ...state, clear };
 };
 
 export default useHttp;
