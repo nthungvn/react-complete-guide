@@ -1,20 +1,20 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
 import Search from './Search';
+
+const url =
+  'https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json';
 
 function Ingredients() {
   const [ingredients, setIngredients] = useState([]);
 
   const addIngredientHandler = (ingredient) => {
-    fetch(
-      'https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json',
-      {
-        method: 'POST',
-        body: JSON.stringify(ingredient),
-        headers: { 'Content-Type': 'application/json' },
-      }
-    )
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(ingredient),
+      headers: { 'Content-Type': 'application/json' },
+    })
       .then((response) => response.json())
       .then((data) => {
         setIngredients((prevIngredients) =>
@@ -22,6 +22,20 @@ function Ingredients() {
         );
       });
   };
+
+  useEffect(() => {
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        const ingredients = [];
+
+        for (let key in data) {
+          const ingredient = data[key];
+          ingredients.push({ id: key, ...ingredient });
+        }
+        setIngredients(ingredients);
+      });
+  }, []);
 
   const removeIngredientHandler = (ingredientId) => {
     setIngredients((prevIngredients) =>
