@@ -6,6 +6,7 @@ import './IngredientForm.css';
 const IngredientForm = React.memo((props) => {
   const [enteredTitle, setEnteredTitle] = useState('');
   const [enteredAmount, setEnteredAmount] = useState('');
+  console.log('IngredientForm');
 
   const submitHandler = (event) => {
     event.preventDefault();
@@ -16,7 +17,7 @@ const IngredientForm = React.memo((props) => {
   };
 
   const changeTitleHandler = (event) => {
-    const titleValue = event.target.value.trim();
+    const titleValue = event.target.value;
     if (!titleValue) {
       return;
     }
@@ -24,7 +25,7 @@ const IngredientForm = React.memo((props) => {
   };
 
   const changeAmountHandler = (event) => {
-    const amountValue = event.target.value.trim();
+    const amountValue = event.target.value;
     if (!amountValue) {
       return;
     }

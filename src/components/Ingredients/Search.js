@@ -8,6 +8,7 @@ const url =
   'https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients.json';
 
 const Search = React.memo((props) => {
+  console.log('Search');
   const [enteredSearchText, setEnteredSearchText] = useState('');
   const searchTextInputRef = useRef();
   const [isLoading, setIsLoading] = useState(false);

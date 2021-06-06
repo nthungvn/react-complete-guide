@@ -1,4 +1,4 @@
-import { useCallback, useContext, useReducer } from 'react';
+import { useCallback, useContext, useMemo, useReducer } from 'react';
 import { AuthContext } from '../../context/auth-context';
 import ErrorModal from '../UI/ErrorModal';
 import IngredientForm from './IngredientForm';
@@ -17,7 +17,7 @@ const initialState = {
 const reducerFn = (state, action) => {
   if (action.type === 'SENDING') {
     return {
-      ingredients: [...state.ingredients],
+      ...state,
       isLoading: true,
       error: null,
     };
@@ -43,7 +43,7 @@ const reducerFn = (state, action) => {
 
   if (action.type === 'ERROR') {
     return {
-      ingredients: [...state.ingredients],
+      ...state,
       isLoading: false,
       error: action.error,
     };
@@ -51,7 +51,7 @@ const reducerFn = (state, action) => {
 
   if (action.type === 'CLEAR_ERROR') {
     return {
-      ingredients: [...state.ingredients],
+      ...state,
       isLoading: false,
       error: null,
     };
@@ -101,7 +101,7 @@ function Ingredients() {
       });
   };
 
-  const removeIngredientHandler = (ingredientId) => {
+  const removeIngredientHandler = useCallback((ingredientId) => {
     dispatch({ type: 'SENDING' });
     const url = `https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/ingredients/${ingredientId}.json`;
     fetch(url, {
@@ -126,19 +126,29 @@ function Ingredients() {
           error: error.message || 'Something went wrong',
         });
       });
-  };
+  }, []);
 
   const searchHandler = useCallback((searchedIngredients) => {
     dispatch({ type: 'SET_INGREDIENTS', ingredients: searchedIngredients });
   }, []);
 
-  const closeModalHandler = () => {
+  const closeModalHandler = useCallback(() => {
     dispatch({ type: 'CLEAR_ERROR' });
-  };
+  }, []);
 
   const logoutHandler = () => {
     authCtx.logout();
   };
+
+  const ingredientList = useMemo(
+    () => (
+      <IngredientList
+        ingredients={ingredients}
+        onRemoveItem={removeIngredientHandler}
+      />
+    ),
+    [ingredients, removeIngredientHandler]
+  );
 
   return (
     <div className="App">
@@ -156,10 +166,7 @@ function Ingredients() {
 
       <section>
         <Search onSearch={searchHandler} />
-        <IngredientList
-          ingredients={ingredients}
-          onRemoveItem={removeIngredientHandler}
-        />
+        {ingredientList}
       </section>
     </div>
   );
