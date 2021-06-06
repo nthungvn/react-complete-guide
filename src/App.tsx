@@ -6,7 +6,7 @@ import { Todo } from './models/todo';
 const App = () => {
   const [todos, setTodos] = useState<Todo[]>([
     { id: 't1', text: 'Learn React' },
-    { id: 't1', text: 'Learn Typescript' },
+    { id: 't2', text: 'Learn Typescript' },
   ]);
 
   const addTodoHandler = (text: string) => {
@@ -15,10 +15,14 @@ const App = () => {
     );
   };
 
+  const removeTodoHandler = (id: string) => {
+    setTodos((prevTodos) => prevTodos.filter((todo) => todo.id !== id));
+  };
+
   return (
     <div>
       <NewTodo onAddTodo={addTodoHandler} />
-      <Todos items={todos} />
+      <Todos items={todos} onRemoveTodo={removeTodoHandler} />
     </div>
   );
 };

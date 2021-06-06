@@ -2,11 +2,20 @@ import { Todo } from '../models/todo';
 import TodoItem from './TodoItem';
 import classes from './Todos.module.css';
 
-const Todos: React.FC<{ items: Todo[] }> = (props) => {
+type TodoProps = {
+  items: Todo[];
+  onRemoveTodo: (id: string) => void;
+};
+
+const Todos: React.FC<TodoProps> = (props) => {
   return (
     <ul className={classes.todos}>
       {props.items.map((item) => (
-        <TodoItem key={item.id} value={item} />
+        <TodoItem
+          key={item.id}
+          value={item}
+          onRemoveTodo={props.onRemoveTodo.bind(null, item.id)}
+        />
       ))}
     </ul>
   );
