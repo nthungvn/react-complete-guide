@@ -2,6 +2,7 @@ import { createContext, useState } from 'react';
 
 const initialState = {
   favorites: [],
+  totalFavorites: 0,
   addFavorite: (meetup) => {},
   removeFavorite: (meetupId) => {},
   itemIsFavorite: (meetupId) => {},
@@ -28,6 +29,7 @@ const FavoritesContextProvider = (props) => {
 
   const contextValue = {
     favorites,
+    totalFavorites: favorites.length,
     addFavorite: addFavoriteHandler,
     removeFavorite: removeFavoriteHandler,
     itemIsFavorite: itemIsFavoriteHandler,
