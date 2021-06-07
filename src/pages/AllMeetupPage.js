@@ -1,32 +1,39 @@
-import { Fragment } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import MeetupList from '../components/meetups/MeetupList';
 
-const DUMMY_DATA = [
-  {
-    id: 'm1',
-    title: 'This is a first meetup',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/2560px-Stadtbild_M%C3%BCnchen.jpg',
-    address: 'Meetupstreet 5, 12345 Meetup City',
-    description:
-      'This is a first, amazing meetup which you definitely should not miss. It will be a lot of fun!',
-  },
-  {
-    id: 'm2',
-    title: 'This is a second meetup',
-    image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtbild_M%C3%BCnchen.jpg/2560px-Stadtbild_M%C3%BCnchen.jpg',
-    address: 'Meetupstreet 5, 12345 Meetup City',
-    description:
-      'This is a first, amazing meetup which you definitely should not miss. It will be a lot of fun!',
-  },
-];
-
 const AllMeetupPage = (props) => {
+  const [isFetching, setIsFetching] = useState(true);
+  const [meetups, setMeetups] = useState([]);
+
+  useEffect(() => {
+    const fetchMeetups = async () => {
+      const response = await fetch(
+        'https://react-complete-guide-400e6-default-rtdb.asia-southeast1.firebasedatabase.app/meetups.json'
+      );
+      const rawData = await response.json();
+      const meetups = [];
+      for (let key in rawData) {
+        meetups.push({ id: key, ...rawData[key] });
+      }
+      return meetups;
+    };
+
+    fetchMeetups().then((meetups) => {
+      setIsFetching(false);
+      setMeetups(meetups);
+    });
+  }, []);
+
+  let content = <MeetupList meetups={meetups} />;
+
+  if (isFetching) {
+    content = <p>Loading...</p>;
+  }
+
   return (
     <Fragment>
       <h1>The All Meetup Page</h1>
-      <MeetupList meetups={DUMMY_DATA} />
+      {content}
     </Fragment>
   );
 };
