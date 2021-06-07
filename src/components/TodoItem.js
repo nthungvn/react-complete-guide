@@ -1,6 +1,16 @@
+import { useState } from 'react';
+import Backdrop from './Backdrop';
+import Modal from './Modal';
+
 const TodoItem = (props) => {
+  const [modalIsShow, setModalIsShow] = useState(false);
+
   const deleteHandler = () => {
-    console.log('clicked on', props.text);
+    setModalIsShow(true);
+  };
+
+  const cancelDeleteHandler = () => {
+    setModalIsShow(false);
   };
 
   return (
@@ -11,6 +21,15 @@ const TodoItem = (props) => {
           DELETE
         </button>
       </div>
+      {modalIsShow && (
+        <section>
+          <Backdrop onClick={cancelDeleteHandler} />
+          <Modal
+            onCancel={cancelDeleteHandler}
+            onConfirm={cancelDeleteHandler}
+          />
+        </section>
+      )}
     </li>
   );
 };
